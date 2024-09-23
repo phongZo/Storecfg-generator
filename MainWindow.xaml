@@ -1,0 +1,21 @@
+﻿<Window x:Class="StorecfgGenerator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StorecfgGenerator"
+        Title="Storecfg Generator" Height="450" Width="860" AllowDrop="true">
+    <Grid>
+        <TabControl>
+            <TabItem Header="General">
+                <local:GeneralTab/>
+            </TabItem>
+            <TabItem Header="Profile">
+                <local:ProfileTab/>
+            </TabItem>
+            <TabItem Header="Markers">
+                <local:MarkerTab/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

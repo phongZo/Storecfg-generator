@@ -1,0 +1,192 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StorecfgGenerator">
+    <Style x:Key="CommonToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="FrameworkElement.Height" Value="20"/>
+        <Setter Property="FrameworkElement.Width" Value="50"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="B1" Background="Gray" CornerRadius="10" Padding="1">
+                        <Border x:Name="B2" Background="White" Width="{TemplateBinding FrameworkElement.Height}" CornerRadius="20"
+                    HorizontalAlignment="Left">
+                            <ContentPresenter/>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                            <Setter TargetName="B2" Property="FrameworkElement.HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="B1" Property="Border.Background" Value="#40A9FF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <local:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter"/>
+    <Style x:Key="ValidationTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Control.BorderBrush" Value="#d9d9d9"/>
+        <Setter Property="Control.BorderThickness" Value="1"/>
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value=""/>
+                </MultiDataTrigger.Conditions>
+                <TriggerBase.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(TextBox.BorderBrush).(SolidColorBrush.Color)" To="Red"
+                              Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </TriggerBase.EnterActions>
+                <TriggerBase.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(TextBox.BorderBrush).(SolidColorBrush.Color)" To="#d9d9d9"
+                              Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </TriggerBase.ExitActions>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ShowDomainInput" TargetType="{x:Type TextBox}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=ProcessInput, Path=Visibility}" Value="Visible">
+                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ProcessInput, Path=Visibility}" Value="Collapsed">
+                <Setter Property="UIElement.Visibility" Value="Visible"/>
+            </DataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value=""/>
+                </MultiDataTrigger.Conditions>
+                <TriggerBase.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(TextBox.BorderBrush).(SolidColorBrush.Color)" To="Red"
+                              Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </TriggerBase.EnterActions>
+                <TriggerBase.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(TextBox.BorderBrush).(SolidColorBrush.Color)" To="#d9d9d9"
+                              Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </TriggerBase.ExitActions>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="CustomBorderedButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Control.Background" Value="Transparent"/>
+        <Setter Property="Control.Foreground" Value="Black"/>
+        <Setter Property="Control.Padding" Value="5"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="MyBorderedButton" BorderThickness="2">
+                        <Border.BorderBrush>
+                            <VisualBrush>
+                                <VisualBrush.Visual>
+                                    <Rectangle StrokeDashArray="2 1" Stroke="#40A9FF" StrokeThickness="2"
+                             RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                             RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                             Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Border.BorderBrush>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CustomTabItemStyle" TargetType="{x:Type TabItem}">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Border x:Name="Bd" BorderBrush="Transparent" BorderThickness="1" Background="Transparent" Padding="5,2"
+                  Margin="0,1,0,0" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="Content" ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TabItem.IsSelected" Value="true">
+                            <Setter TargetName="Bd" Property="Border.BorderBrush" Value="#f4b518"/>
+                            <Setter Property="Control.Foreground" Value="#f4b518"/>
+                        </Trigger>
+                        <Trigger Property="TabItem.IsSelected" Value="false">
+                            <Setter TargetName="Bd" Property="Border.Background" Value="#fafafa"/>
+                            <Setter Property="Control.Foreground" Value="Black"/>
+                            <Setter TargetName="Bd" Property="Border.BorderBrush" Value="#d9d9d9"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CellBorderStyle" TargetType="{x:Type Border}">
+        <Setter Property="Border.Background" Value="Black"/>
+        <Setter Property="UIElement.Opacity" Value="0.2"/>
+        <Style.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="true">
+                <Setter Property="UIElement.Opacity" Value="0.5"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="SlowModePanelStyle" TargetType="{x:Type StackPanel}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=FastModeToggle, Path=IsChecked}" Value="True">
+                <Setter Property="UIElement.Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=FastModeToggle, Path=IsChecked}" Value="False">
+                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="FastModePanelStyle" TargetType="{x:Type StackPanel}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=FastModeToggle, Path=IsChecked}" Value="True">
+                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=FastModeToggle, Path=IsChecked}" Value="False">
+                <Setter Property="UIElement.Visibility" Value="Visible"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="DomainOnlyStyle" TargetType="{x:Type DockPanel}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=DomainWithPortPanel, Path=Visibility}" Value="Visible">
+                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=DomainWithPortPanel, Path=Visibility}" Value="Collapsed">
+                <Setter Property="UIElement.Visibility" Value="Visible"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ShowServerSettingsStyle" TargetType="{x:Type StackPanel}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=ServerMode, Path=IsChecked}" Value="True">
+                <Setter Property="UIElement.Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ServerlessMode, Path=IsChecked}" Value="True">
+                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ServerlessRadioStyle" TargetType="{x:Type RadioButton}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=ServerMode, Path=IsChecked}" Value="True">
+                <Setter Property="ToggleButton.IsChecked" Value="False"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ServerMode, Path=IsChecked}" Value="False">
+                <Setter Property="ToggleButton.IsChecked" Value="True"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

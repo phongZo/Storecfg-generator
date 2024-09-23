@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="StorecfgGenerator.MarkerGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StorecfgGenerator"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../CustomElements.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
+            <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <ScrollViewer Height="250" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10 0 0 0">
+            <DockPanel HorizontalAlignment="Left">
+                <Label Width="Auto" Content="Grid On:"/>
+                <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
+                    IsChecked="{Binding CurrentEditingMarker.GridEnabled}"/>
+            </DockPanel>
+            <DockPanel Margin="0 10 0 0">
+                <Label Width="Auto" Content="Opacity:"/>
+                <Slider x:Name="GridSlider" Width="200" Margin="0 5 0 0" VerticalAlignment="Center" Minimum="0" Maximum="1"
+              SmallChange="0.01" LargeChange="0.1" Value="{Binding CurrentEditingMarker.GridOpacity}"/>
+                <TextBox BorderBrush="#d9d9d9" HorizontalAlignment="Left" Padding="3 0 0 0" Margin="7 2 0 0" Width="90"
+               VerticalAlignment="Center" Text="{Binding GridOpacity}"/>
+            </DockPanel>
+            <DockPanel Margin="0 10 0 0" HorizontalAlignment="Left">
+                <Label Width="Auto" Content="Show Timestamp:"/>
+                <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
+                    IsChecked="{Binding CurrentEditingMarker.GridShowTimestamp}"/>
+            </DockPanel>
+            <DockPanel Margin="0 10 0 0">
+                <Label Width="Auto" Content="Grid Shape:"/>
+                <ComboBox Width="300" HorizontalAlignment="Left" SelectedIndex="{Binding CurrentGridShapeIndex}">
+                    <ComboBoxItem Tag="Shape" Content="Square"/>
+                    <ComboBoxItem Tag="Shape" Content="Circle"/>
+                    <ComboBoxItem x:Name="GridTypeLogoCombobox" Tag="Shape" Content="Logo"/>
+                </ComboBox>
+            </DockPanel>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left"
+          Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Primary Logo:"/>
+                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridLogoURL}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left"
+          Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Secondary Logo:"/>
+                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridSecondaryLogoURL}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Cell Width:"/>
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
+               TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
+               Text="{Binding CurrentEditingMarker.CellWidth}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Cell Height:"/>
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
+               TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
+               Text="{Binding CurrentEditingMarker.CellHeight}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Grid Spacing X:"/>
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
+               TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
+               Text="{Binding CurrentEditingMarker.GridSpacingX}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Grid Spacing Y:"/>
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
+               TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
+               Text="{Binding CurrentEditingMarker.GridSpacingY}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Margin Percent:"/>
+                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
+               Text="{Binding CurrentEditingMarker.MarginPercent}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <Label Grid.Column="0" Content="Grid Color 1:"/>
+                    <Label Padding="0" HorizontalAlignment="Center" FontSize="10" Content="(Fill Color)"/>
+                </StackPanel>
+                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Margin="0 7 0 0" Grid.Column="1"
+               VerticalAlignment="Top" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridColor1}"
+               Height="{Binding ElementName=gridSecondColor, Path=ActualHeight}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Grid Color 2:"/>
+                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" x:Name="gridSecondColor"
+               Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridColor2}"/>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

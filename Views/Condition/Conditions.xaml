@@ -1,0 +1,138 @@
+﻿<UserControl x:Class="StorecfgGenerator.Conditions"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StorecfgGenerator"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../CustomElements.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:SubtractConverter x:Key="SubtractConverter"/>
+            <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
+            <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <local:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+            <local:ConditionMethodToLabelAndVisible x:Key="ConditionMethodToLabelAndVisible"/>
+            <local:MethodToProtocolConverter x:Key="MethodToProtocolConverter"/>
+            <local:ConditionMethodToDnsAddressVisibility x:Key="ConditionMethodToDnsAddressVisibility"/>
+            <local:ConditionMethodToShowTimeoutVisibility x:Key="ConditionMethodToShowTimeoutVisibility"/>
+            <local:ConditionWaitToVisibility x:Key="ConditionWaitToVisibility"/>
+            <local:ConditionProcessInputVisibility x:Key="ConditionProcessInputVisibility"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <StackPanel Width="Auto" Margin="0 10 0 0">
+        <TextBlock HorizontalAlignment="Center" Text="Conditions Flow" Foreground="#f4b518" FontWeight="Bold"/>
+        <Button Click="Add_Condition_Top_Btn_Click" Background="White" Margin="0 10 0 0" HorizontalAlignment="Left"
+          Width="350" Height="25" Style="{StaticResource CustomBorderedButtonStyle}">
+            <DockPanel>
+                <Image Source="/Icon/plus-solid.png" Width="30"/>
+                <TextBlock Text="Add Condition (at top)" FontWeight="Bold" Foreground="#40A9FF"/>
+            </DockPanel>
+        </Button>
+        <ItemsControl ItemsSource="{Binding Profile.Conditions}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Margin="0 10 0 0">
+                        <Image Source="/Icon/ban-solid.png" Margin="0 14 0 0" Height="15" HorizontalAlignment="Left"
+                 VerticalAlignment="Center"/>
+                        <ItemsControl ItemsSource="{Binding rules}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="20 0 0 0" Width="Auto" HorizontalAlignment="Left">
+                                        <TextBlock Text="FLOW THROUGH" FontSize="8"/>
+                                        <CheckBox BorderBrush="#d9d9d9" Margin="0 8 0 0" VerticalContentAlignment="Bottom"
+                            HorizontalAlignment="Center" Height="15" Width="15" IsChecked="{Binding extras.flowThrough}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left">
+                            <TextBlock Text="NAME" FontSize="8"/>
+                            <TextBox BorderBrush="#d9d9d9" Margin="0 3 0 0" HorizontalAlignment="Center" Height="25" Width="80"
+                     Text="{Binding name}"/>
+                        </StackPanel>
+                        <DockPanel>
+                            <ItemsControl ItemsSource="{Binding rules}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left">
+                                            <TextBlock Text="METHOD" FontSize="8"/>
+                                            <ComboBox x:Name="SelectedMethod" BorderBrush="#d9d9d9" Margin="0 3 0 0" HorizontalAlignment="Center"
+                              Height="25" Width="80" ItemsSource="{Binding Items}" SelectedItem="{Binding method}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <StackPanel Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left"
+                        Visibility="{Binding ElementName=SelectedMethod, Path=SelectedItem, Converter={StaticResource ConditionWaitToVisibility}}">
+                                <TextBlock Text="MARKER" FontSize="8"/>
+                                <ComboBox Background="White" BorderBrush="#d9d9d9" Margin="0 3 0 0" HorizontalAlignment="Center" Height="25"
+                        Width="160"
+                        ItemsSource="{Binding DataContext.MarkerListName, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                        SelectedItem="{Binding marker}"/>
+                            </StackPanel>
+                        </DockPanel>
+                        <ItemsControl ItemsSource="{Binding rules}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel>
+                                        <StackPanel x:Name="DomainOrProcessPanel" Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left"
+                              Visibility="{Binding method, Converter={StaticResource ConditionWaitToVisibility}}">
+                                            <TextBlock FontSize="8" Text="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}"/>
+                                            <DockPanel x:Name="DomainWithPortPanel"
+                               Visibility="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}">
+                                                <Border Margin="0 3 0 0" Height="25" BorderBrush="#d9d9d9" BorderThickness="1,1,0,1">
+                                                    <TextBlock x:Name="ConditionProtocol" Background="#fafafa" Padding="2 2 0 0" HorizontalAlignment="Left"
+                                   Width="49" Text="{Binding method, Converter={StaticResource MethodToProtocolConverter}}"/>
+                                                </Border>
+                                                <TextBox Margin="0 3 0 0" Height="25" Width="89" BorderBrush="#d9d9d9" Padding="2 2 0 0"
+                               HorizontalAlignment="Left" Text="{Binding Domain}"/>
+                                                <Border Margin="0 3 0 0" Height="25" BorderBrush="#d9d9d9" BorderThickness="0,1,0,1">
+                                                    <TextBlock Background="#fafafa" Padding="0 2 0 0" Text=":" HorizontalAlignment="Center" Width="Auto"
+                                   TextWrapping="Wrap"/>
+                                                </Border>
+                                                <TextBox Margin="0 3 0 0" Height="25" Width="55" BorderBrush="#d9d9d9" Padding="2 2 0 0"
+                               HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Port}"/>
+                                            </DockPanel>
+                                            <DockPanel Style="{StaticResource DomainOnlyStyle}">
+                                                <TextBox x:Name="ProcessInput" BorderBrush="#d9d9d9" Width="196" Margin="0 3 0 0"
+                               HorizontalAlignment="Center" Height="Auto" MinHeight="25" TextWrapping="Wrap" Text="{Binding data}"
+                               Visibility="{Binding method, Converter={StaticResource ConditionProcessInputVisibility}}"/>
+                                                <TextBox Width="196" BorderBrush="#d9d9d9" Margin="0 3 0 0" HorizontalAlignment="Center" Height="25"
+                               TextWrapping="Wrap" Text="{Binding data}"/>
+                                            </DockPanel>
+                                        </StackPanel>
+                                        <StackPanel Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left"
+                              Visibility="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}">
+                                            <TextBlock FontSize="8"
+                               Text="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}"/>
+                                            <TextBox Margin="0 3 0 0" BorderBrush="#d9d9d9" HorizontalAlignment="Left" Height="25" Width="40"
+                             TextWrapping="Wrap" Text="{Binding extras.ConditionTimeout}"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="5 0 0 0" HorizontalAlignment="Left" Width="196"
+                              Visibility="{Binding method, Converter={StaticResource ConditionMethodToDnsAddressVisibility}}">
+                                            <TextBlock Text="DNS SERVER ADDRESS (Optional)" FontSize="8"/>
+                                            <TextBox x:Name="DnsInput" BorderBrush="#d9d9d9" Margin="0 3 0 0" HorizontalAlignment="Center" Height="25"
+                             Width="196" TextWrapping="Wrap" Text="{Binding extras.dnsString}"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Click="Add_Condition_Bottom_Btn_Click" Background="White" Margin="0 10 0 0"
+          HorizontalAlignment="Left" Width="350" Height="25"
+          Style="{StaticResource CustomBorderedButtonStyle}">
+            <DockPanel>
+                <Image Source="/Icon/plus-solid.png" Width="30"/>
+                <TextBlock Text="Add Condition (at bottom)" FontWeight="Bold" Foreground="#40A9FF"/>
+            </DockPanel>
+        </Button>
+    </StackPanel>
+</UserControl>
