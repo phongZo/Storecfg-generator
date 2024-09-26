@@ -5,8 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StorecfgGenerator"
         Title="Storecfg Generator" Height="450" Width="860" AllowDrop="true">
-    <Grid>
-        <TabControl>
+    <Window.Resources>
+        <Style TargetType="ToolBar">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToolBar}">
+                        <ToolBarPanel IsItemsHost="True" Background="AliceBlue"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <ToolBarTray  DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+            <ToolBar>
+                <Button Content="Open" Click="OpenFile_Click" ToolTip="Open a file" Margin="5,0"/>
+                <Button Content="Save" Click="SaveFile_Click" ToolTip="Save the current file" Margin="5,0"/>
+                <Button Content="Save As" Click="SaveAsFile_Click" ToolTip="Save the current file as a new file" Margin="5,0"/>
+            </ToolBar>
+        </ToolBarTray>
+
+        <TabControl DockPanel.Dock="Top">
             <TabItem Header="General">
                 <local:GeneralTab/>
             </TabItem>
@@ -17,5 +36,5 @@
                 <local:MarkerTab/>
             </TabItem>
         </TabControl>
-    </Grid>
+    </DockPanel>
 </Window>

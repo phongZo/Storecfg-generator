@@ -13,114 +13,118 @@
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="20">
-                <DockPanel HorizontalAlignment="Center" Margin="0,0,0,15">
-                    <RadioButton x:Name="WindowMode" Content="Windows" IsChecked="True" GroupName="OS"/>
-                    <RadioButton x:Name="MacMode" Content="Mac" GroupName="OS" Margin="20,0,0,0"/>
-                </DockPanel>
+        <DockPanel LastChildFill="True">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="20">
+                    <DockPanel HorizontalAlignment="Center" Margin="0,0,0,15">
+                        <RadioButton x:Name="WindowMode" Content="Windows" IsChecked="True" GroupName="OS"/>
+                        <RadioButton x:Name="MacMode" Content="Mac" GroupName="OS" Margin="20,0,0,0"/>
+                    </DockPanel>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <!-- Customer ID -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="0,0,10,15">
-                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Label Content="Customer Id:"/>
-                    </StackPanel>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,15" 
+                        <!-- Customer ID -->
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="0,0,10,15">
+                            <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Label Content="Customer Id:"/>
+                        </StackPanel>
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,15" 
                          LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
                          BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center" 
-                         IsEnabled="{Binding DevMode}" Text="{Binding CustomerID}"/>
+                         IsEnabled="True" Text="{Binding CustomerID}"/>
 
-                    <!-- Client ID -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,0,10,15">
-                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Label Content="Client Id:"/>
-                    </StackPanel>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,15"
+                        <!-- Client ID -->
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,0,10,15">
+                            <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Label Content="Client Id:"/>
+                        </StackPanel>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,15"
                          PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                          TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Padding="5"
                          VerticalAlignment="Center" Text="{Binding ClientID}"/>
 
-                    <!-- License -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,10,15">
-                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Label Content="License:"/>
-                    </StackPanel>
-                    <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,15"
+                        <!-- License -->
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,10,15">
+                            <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Label Content="License:"/>
+                        </StackPanel>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,15"
                          LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
                          BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center" 
-                         IsEnabled="{Binding DevMode}" Text="{Binding License}"/>
+                         IsEnabled="true" Text="{Binding License}"/>
 
-                    <!-- Deploy Type -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Margin="0,0,10,15"
+                        <!-- Deploy Type -->
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Margin="0,0,10,15"
                             Visibility="{Binding DevMode, Converter={StaticResource VisibleForDevMode}}">
-                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Label Content="Deploy type:"/>
-                    </StackPanel>
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,15"
+                            <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Label Content="Deploy type:"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,15"
                             Visibility="{Binding DevMode, Converter={StaticResource VisibleForDevMode}}">
-                        <RadioButton x:Name="ServerMode" Content="Server" GroupName="DeployType" 
+                            <RadioButton x:Name="ServerMode" Content="Server" GroupName="DeployType" 
                                  IsChecked="{Binding IsServerMode}"/>
-                        <RadioButton x:Name="ServerlessMode" Style="{StaticResource ServerlessRadioStyle}" 
+                            <RadioButton x:Name="ServerlessMode" Style="{StaticResource ServerlessRadioStyle}" 
                                  Content="Serverless" GroupName="DeployType" Margin="15,0,0,0"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Server Settings -->
-                    <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
-                        <!-- Default Primary Server -->
-                        <DockPanel Margin="0,0,0,15">
-                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Margin="0,0,10,0">
-                                <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                                <Label Content="Default Primary Server:"/>
-                            </StackPanel>
-                            <DockPanel>
-                                <ComboBox x:Name="ComboBox1" Width="80" DockPanel.Dock="Left" 
+                        <!-- Server Settings -->
+                        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                            <!-- Default Primary Server -->
+                            <DockPanel Margin="0,0,0,15">
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Margin="0,0,10,0">
+                                    <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    <Label Content="Default Primary Server:"/>
+                                </StackPanel>
+                                <DockPanel>
+                                    <ComboBox x:Name="ComboBox1" Width="70" DockPanel.Dock="Left" 
                                       SelectedIndex="{Binding Protocol1, Mode=TwoWay}">
-                                    <ComboBoxItem>http://</ComboBoxItem>
-                                    <ComboBoxItem>https://</ComboBoxItem>
-                                </ComboBox>
-                                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" 
-                                     BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center"
+                                        <ComboBoxItem>http://</ComboBoxItem>
+                                        <ComboBoxItem>https://</ComboBoxItem>
+                                    </ComboBox>
+                                    <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" 
+                                     BorderBrush="#d9d9d9" Padding="5" Width="120" VerticalAlignment="Center"
                                       Text="{Binding Domain1}" Margin="5,0"/>
-                                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" 
-                                     BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left" Padding="5" VerticalAlignment="Center" 
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="1,0,4,0" />
+                                    <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" 
+                                     BorderBrush="#d9d9d9" Width="80" HorizontalAlignment="Left" Padding="5" VerticalAlignment="Center" 
                                      Text="{Binding Port1}"/>
+                                </DockPanel>
                             </DockPanel>
-                        </DockPanel>
 
-                        <!-- Default Secondary Server -->
-                        <DockPanel Margin="0,0,0,15">
-                            <Label Content="Default Secondary Server:" DockPanel.Dock="Left" Margin="0,0,10,0"/>
-                            <DockPanel>
-                                <ComboBox x:Name="ComboBox2" Width="80" DockPanel.Dock="Left" 
+                            <!-- Default Secondary Server -->
+                            <DockPanel Margin="0,0,0,15">
+                                <Label Content="Default Secondary Server:" DockPanel.Dock="Left" Margin="0,0,10,0"/>
+                                <DockPanel>
+                                    <ComboBox x:Name="ComboBox2" Width="70" DockPanel.Dock="Left" 
                                        SelectedIndex="{Binding Protocol2, Mode=TwoWay}">
-                                    <ComboBoxItem>http://</ComboBoxItem>
-                                    <ComboBoxItem>https://</ComboBoxItem>
-                                </ComboBox>
-                                <TextBox BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center"
+                                        <ComboBoxItem>http://</ComboBoxItem>
+                                        <ComboBoxItem>https://</ComboBoxItem>
+                                    </ComboBox>
+                                    <TextBox BorderBrush="#d9d9d9" Width="120" Padding="5" VerticalAlignment="Center"
                                       Text="{Binding Domain2}" Margin="5,0"/>
-                                <TextBox BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left" Padding="5" VerticalAlignment="Center" 
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="1,0,4,0" />
+                                    <TextBox BorderBrush="#d9d9d9" Width="80" HorizontalAlignment="Left" Padding="5" VerticalAlignment="Center" 
                                      Text="{Binding Port2}"/>
+                                </DockPanel>
                             </DockPanel>
-                        </DockPanel>
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
-        </ScrollViewer>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
     </Grid>
 </UserControl>

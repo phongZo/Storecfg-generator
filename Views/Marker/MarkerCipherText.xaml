@@ -16,35 +16,57 @@
     </FrameworkElement.Resources>
     <ScrollViewer Height="250" VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10 0 0 0">
-            <DockPanel HorizontalAlignment="Left">
-                <Label Width="Auto" Content="Cipher Text Grid On:"/>
-                <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Width="Auto" Content="Cipher Text Grid On:"/>
+                <ToggleButton Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
                     IsChecked="{Binding CurrentEditingMarker.CipherTextGridEnabled}"/>
-            </DockPanel>
-            <DockPanel Margin="0 10 0 0">
-                <Label Width="Auto" Content="Opacity:"/>
-                <Slider x:Name="CipherTextSlider" Width="200" Margin="0 5 0 0" VerticalAlignment="Center" Minimum="0"
-              Maximum="1" SmallChange="0.01" LargeChange="0.1"
-              Value="{Binding CurrentEditingMarker.CipherTextGridOpacity}"/>
-                <TextBox BorderBrush="#d9d9d9" HorizontalAlignment="Left" Padding="3 0 0 0" Margin="7 2 0 0" Width="90"
-               VerticalAlignment="Center"
-               Text="{Binding CipherTextGridOpacity}"/>
-            </DockPanel>
-            <DockPanel Margin="0 10 0 0" HorizontalAlignment="Left">
-                <Label Width="Auto" Content="Show Timestamp:"/>
-                <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
+            </Grid>
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Width="Auto" Content="Opacity:"/>
+                <Slider x:Name="CipherTextSlider" Grid.Column="1" Margin="0 5 0 0" VerticalAlignment="Center" Minimum="0"
+                    Maximum="1" SmallChange="0.01" LargeChange="0.1"
+                    Value="{Binding CurrentEditingMarker.CipherTextGridOpacity, Mode=TwoWay}"/>
+                <TextBox Grid.Column="2" Width="120" BorderBrush="#d9d9d9" HorizontalAlignment="Stretch" Padding="3 0 0 0" Margin="7 2 30 0"
+                    VerticalAlignment="Stretch"
+                    Text="{Binding CurrentEditingMarker.CipherTextGridOpacity, Mode=TwoWay, StringFormat={}{0:F2}}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Width="Auto" Content="Show Timestamp:"/>
+                <ToggleButton Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
                     IsChecked="{Binding CurrentEditingMarker.CipherTextGridShowTimestamp}"/>
-            </DockPanel>
-            <DockPanel Margin="0 10 0 0">
-                <Label Width="Auto" Content="Text Angle:"/>
-                <Slider x:Name="CipherTextTextAngleSlider" Width="200" Margin="0 5 0 0" VerticalAlignment="Center"
-              Minimum="0" Maximum="360" SmallChange="1" LargeChange="10"
-              Value="{Binding CurrentEditingMarker.CipherTextGridAngle}"/>
-                <TextBox BorderBrush="#d9d9d9" HorizontalAlignment="Left" Padding="3 0 0 0" Margin="7 2 0 0" Width="90"
-               VerticalAlignment="Center"
-               Text="{Binding CipherTextGridAngle}"/>
-            </DockPanel>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            </Grid>
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Width="Auto" Content="Text Angle:"/>
+
+                <Slider Grid.Column="1" x:Name="CipherTextTextAngleSlider" Margin="0 5 0 0" VerticalAlignment="Stretch"
+                    Minimum="0" Maximum="360" SmallChange="1" LargeChange="10"
+                    Value="{Binding CurrentEditingMarker.CipherTextGridAngle, Mode=TwoWay}"/>
+
+                <TextBox Grid.Column="2" BorderBrush="#d9d9d9" Width="120" HorizontalAlignment="Stretch" Padding="3 0 0 0" Margin="7 2 30 0"
+                    VerticalAlignment="Stretch"
+                    Text="{Binding CurrentEditingMarker.CipherTextGridAngle, Mode=TwoWay}"/>
+            </Grid>
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
@@ -52,9 +74,9 @@
                 <Label Grid.Column="0" Content="Text Size:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
-               Text="{Binding CurrentEditingMarker.CipherTextGridSize}"/>
+               Text="{Binding CurrentEditingMarker.CipherTextGridSize}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
@@ -62,9 +84,9 @@
                 <Label Grid.Column="0" Content="Grid Spacing X:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-               Text="{Binding CurrentEditingMarker.CipherTextGridSpacingX}"/>
+               Text="{Binding CurrentEditingMarker.CipherTextGridSpacingX}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
@@ -72,27 +94,27 @@
                 <Label Grid.Column="0" Content="Grid Spacing Y:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-               Text="{Binding CurrentEditingMarker.CipherTextGridSpacingY}"/>
+               Text="{Binding CurrentEditingMarker.CipherTextGridSpacingY}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Text Color 1:"/>
                 <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Grid.Column="1"
-               BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.CipherTextGridColor1}"/>
+               BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.CipherTextGridColor1}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Text Color 2:"/>
                 <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" x:Name="CipherTextSecondColor"
-               Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.CipherTextGridColor2}"/>
+               Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.CipherTextGridColor2}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
@@ -100,7 +122,7 @@
                 <Label Grid.Column="0" Content="Blur Radius:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-               Text="{Binding CurrentEditingMarker.CipherTextGridBlurRadius}"/>
+               Text="{Binding CurrentEditingMarker.CipherTextGridBlurRadius}" Margin="7 2 30 0"/>
             </Grid>
         </StackPanel>
     </ScrollViewer>

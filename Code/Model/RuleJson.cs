@@ -11,106 +11,106 @@ using System.ComponentModel;
 
 namespace StorecfgGenerator
 {
-  public class RuleJson
-  {
-    private string _data;
-    private ObservableCollection<string> _items;
-    private string _method;
-
-    public string data
+    public class RuleJson
     {
-      get => this._data;
-      set
-      {
-        this._data = value;
-        this.OnPropertyChanged(nameof (data));
-      }
-    }
+        private string _data;
+        private ObservableCollection<string> _items;
+        private string _method;
 
-    public ExtrasJson extras { get; set; }
-
-    [JsonIgnore]
-    public ObservableCollection<string> Items => this._items;
-
-    public string method
-    {
-      get => this._method;
-      set
-      {
-        this._method = value;
-        this.OnPropertyChanged(nameof (method));
-      }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-      PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-      if (propertyChanged == null)
-        return;
-      propertyChanged((object) this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    [JsonIgnore]
-    public string Domain
-    {
-      get
-      {
-        try
+        public string data
         {
-          if (this.method == "HTTP" || this.method == "HTTPS")
-            return new Uri(this.data).Host;
+            get => this._data;
+            set
+            {
+                this._data = value;
+                this.OnPropertyChanged(nameof(data));
+            }
         }
-        catch (Exception ex)
-        {
-        }
-        return "";
-      }
-      set
-      {
-        string str = "http://";
-        if (this.method == "HTTPS")
-          str = "https://";
-        this.data = str + value + ":" + this.Port;
-      }
-    }
 
-    [JsonIgnore]
-    public string Port
-    {
-      get
-      {
-        try
-        {
-          if (this.method == "HTTP" || this.method == "HTTPS")
-            return new Uri(this.data).Port.ToString();
-        }
-        catch (Exception ex)
-        {
-        }
-        return "";
-      }
-      set
-      {
-        string str = "http://";
-        if (this.method == "HTTPS")
-          str = "https://";
-        this.data = str + this.Domain + ":" + value;
-      }
-    }
+        public ExtrasJson extras { get; set; }
 
-    public RuleJson()
-    {
-      ObservableCollection<string> observableCollection = new ObservableCollection<string>();
-      observableCollection.Add("PING");
-      observableCollection.Add("HTTP");
-      observableCollection.Add("HTTPS");
-      observableCollection.Add("DNS");
-      observableCollection.Add("PROCESS");
-      observableCollection.Add("WAIT");
-      this._items = observableCollection;
-      this._method = "PING";
+        [JsonIgnore]
+        public ObservableCollection<string> Items => this._items;
+
+        public string method
+        {
+            get => this._method;
+            set
+            {
+                this._method = value;
+                this.OnPropertyChanged(nameof(method));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if (propertyChanged == null)
+                return;
+            propertyChanged((object)this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        [JsonIgnore]
+        public string Domain
+        {
+            get
+            {
+                try
+                {
+                    if (this.method == "HTTP" || this.method == "HTTPS")
+                        return new Uri(this.data).Host;
+                }
+                catch (Exception)
+                {
+                }
+                return "";
+            }
+            set
+            {
+                string str = "http://";
+                if (this.method == "HTTPS")
+                    str = "https://";
+                this.data = str + value + ":" + this.Port;
+            }
+        }
+
+        [JsonIgnore]
+        public string Port
+        {
+            get
+            {
+                try
+                {
+                    if (this.method == "HTTP" || this.method == "HTTPS")
+                        return new Uri(this.data).Port.ToString();
+                }
+                catch (Exception ex)
+                {
+                }
+                return "";
+            }
+            set
+            {
+                string str = "http://";
+                if (this.method == "HTTPS")
+                    str = "https://";
+                this.data = str + this.Domain + ":" + value;
+            }
+        }
+
+        public RuleJson()
+        {
+            ObservableCollection<string> observableCollection = new ObservableCollection<string>();
+            observableCollection.Add("PING");
+            observableCollection.Add("HTTP");
+            observableCollection.Add("HTTPS");
+            observableCollection.Add("DNS");
+            observableCollection.Add("PROCESS");
+            observableCollection.Add("WAIT");
+            this._items = observableCollection;
+            this._method = "PING";
+        }
     }
-  }
 }

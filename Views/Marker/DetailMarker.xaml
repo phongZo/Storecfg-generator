@@ -40,15 +40,15 @@
                 <local:MarkerOverall/>
             </TabItem>
             <TabItem Header="Logo" BorderBrush="#d9d9d9"
-             Visibility="{Binding DevMode, Converter={StaticResource VisibleForDevMode}}">
+             Visibility="Visible">
                 <local:MarkerLogo/>
             </TabItem>
             <TabItem Header="Grid" BorderBrush="#d9d9d9"
-             Visibility="{Binding DevMode, Converter={StaticResource VisibleForDevMode}}">
+             Visibility="Visible">
                 <local:MarkerGrid/>
             </TabItem>
             <TabItem Header="Cipher Text Grid" BorderBrush="#d9d9d9"
-             Visibility="{Binding DevMode, Converter={StaticResource VisibleForDevMode}}">
+             Visibility="Visible">
                 <local:MarkerCipherText/>
             </TabItem>
             <TabItem Header="Text" BorderBrush="#d9d9d9">
