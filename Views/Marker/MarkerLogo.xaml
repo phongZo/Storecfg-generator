@@ -59,7 +59,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Margin="3" Style="{StaticResource CellBorderStyle}"
-                            Background="{Binding Value, Converter={StaticResource BooleanToColorConverter}}"/>
+                            Background="{Binding Value, Converter={StaticResource BooleanToColorConverter}}" MouseLeftButtonUp="Border_MouseLeftButtonUp"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>

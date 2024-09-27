@@ -35,7 +35,7 @@
            Text="{Binding CurrentMarkerName}"/>
         <Label Content="Marker Settings:" FontWeight="Bold" Margin="0 20 0 0"/>
         <TabControl ItemContainerStyle="{StaticResource CustomTabItemStyle}" BorderThickness="1 0 0 0"
-              BorderBrush="#f4b518" TabStripPlacement="Left">
+              BorderBrush="#f4b518" TabStripPlacement="Left" Height="auto">
             <TabItem Header="Overall" BorderBrush="#d9d9d9">
                 <local:MarkerOverall/>
             </TabItem>

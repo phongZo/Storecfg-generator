@@ -36,6 +36,8 @@ namespace StorecfgGenerator
             {
                 dataContext = border.DataContext as StoreCfgJson.GridItem;
                 num = dataContext != null ? 1 : 0;
+                StoreCfgJson.GridItem gridItem = StoreCfg.Instance.CurrentStoreCfg.LogoPosition2.First(s => (s.ColumnIndex == dataContext.ColumnIndex && s.RowIndex == dataContext.RowIndex));
+                StoreCfg.Instance.CurrentStoreCfg.LogoPosition2.First(s => (s.ColumnIndex == dataContext.ColumnIndex && s.RowIndex == dataContext.RowIndex)).Value = !gridItem.Value;
             }
             else
                 num = 0;
