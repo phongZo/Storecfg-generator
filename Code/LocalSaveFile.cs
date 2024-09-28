@@ -117,7 +117,7 @@ namespace StorecfgGenerator
             try
             {
                 Console.WriteLine("CURRENT SETTINGS SAVED TO FILE");
-                string str = JsonConvert.SerializeObject(newsettings);
+                string str = JsonConvert.SerializeObject(newsettings, Formatting.Indented);
                 if (encrypted)
                 {
                     if (GeneralTab.Instance.MacMode.IsChecked.Value)
