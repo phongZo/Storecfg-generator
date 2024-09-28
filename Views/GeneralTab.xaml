@@ -45,9 +45,9 @@
                             <Label Content="Customer Id:"/>
                         </StackPanel>
                         <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,15" 
-LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
-BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center" 
-IsEnabled="True" Text="{Binding CustomerID}"/>
+                            LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
+                            BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center" 
+                            IsEnabled="True" Text="{Binding CustomerID}"/>
 
                         <!-- Client ID -->
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,0,10,15">
@@ -55,9 +55,9 @@ IsEnabled="True" Text="{Binding CustomerID}"/>
                             <Label Content="Client Id:"/>
                         </StackPanel>
                         <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,15"
-PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Padding="5"
-VerticalAlignment="Center" Text="{Binding ClientID}"/>
+                            PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
+                            TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Padding="5"
+                            VerticalAlignment="Center" Text="{Binding ClientID}"/>
 
                         <!-- License -->
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,10,15">
@@ -65,9 +65,9 @@ VerticalAlignment="Center" Text="{Binding ClientID}"/>
                             <Label Content="License:"/>
                         </StackPanel>
                         <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,15"
-LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
-BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center" 
-IsEnabled="true" Text="{Binding License}"/>
+                            LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
+                            BorderBrush="#d9d9d9" Padding="5" VerticalAlignment="Center" 
+                        IsEnabled="true" Text="{Binding License}"/>
 
                         <!-- Deploy Type -->
                         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Margin="0,0,10,15"
@@ -91,13 +91,13 @@ IsEnabled="true" Text="{Binding License}"/>
                                     <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
                                     <Label Content="Default Primary Server:"/>
                                 </StackPanel>
-                                
+
                             </DockPanel>
 
                             <!-- Default Secondary Server -->
                             <DockPanel Margin="0,0,0,15">
                                 <Label Content="Default Secondary Server:" DockPanel.Dock="Left" Margin="0,0,10,0"/>
-                                
+
                             </DockPanel>
                         </StackPanel>
 
@@ -116,7 +116,7 @@ BorderBrush="#d9d9d9" Padding="5" Width="120" VerticalAlignment="Center"
 BorderBrush="#d9d9d9" Width="80" HorizontalAlignment="Left" Padding="5" VerticalAlignment="Center" 
 Text="{Binding Port1}"/>
 
-                               
+
                             </DockPanel>
 
                             <DockPanel Margin="0,0,0,15">
@@ -132,7 +132,7 @@ Text="{Binding Port1}"/>
 Text="{Binding Port2}"/>
                             </DockPanel>
                         </StackPanel>
-                       
+
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

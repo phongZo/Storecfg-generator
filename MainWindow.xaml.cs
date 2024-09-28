@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace StorecfgGenerator
 {
@@ -57,6 +59,12 @@ namespace StorecfgGenerator
 
         private void SaveFile_Click(object sender, RoutedEventArgs e)
         {
+            if (Keyboard.FocusedElement is TextBox focusedElement)
+            {
+                var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression?.UpdateSource();
+            }
+
             if (string.IsNullOrEmpty(currentFilePath))
             {
                 generalTab.Generate_Storecfg();
@@ -71,6 +79,11 @@ namespace StorecfgGenerator
 
         private void SaveAsFile_Click(object sender, RoutedEventArgs e)
         {
+            if (Keyboard.FocusedElement is TextBox focusedElement)
+            {
+                var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression?.UpdateSource();
+            }
             GeneralTab.Instance.Generate_Storecfg();
         }
 
