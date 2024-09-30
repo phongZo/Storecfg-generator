@@ -17,7 +17,6 @@
                 <TextBox x:Name="txtJsonPreview" AcceptsReturn="True" 
                     TextWrapping="Wrap" 
                     FontFamily="Consolas" 
-                    FontSize="14" 
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
                     Margin="10"
