@@ -21,6 +21,8 @@ namespace StorecfgGenerator
 
         public GeneralTab generalTab = new GeneralTab();
 
+        public JsonPreviewTab jsonPreviewTab = new JsonPreviewTab();
+
         public bool IsDevMode { get; set; } = false;
 
         public SetupConfigJson SetupConfig { get; set; } = new SetupConfigJson();
@@ -111,6 +113,8 @@ namespace StorecfgGenerator
                     StoreCfg.Instance.CurrentStoreCfg = storeCfgJson;
                     this.DataContext = storeCfgJson;
                     this.GetListMarkerName();
+                    // show json in JsonPreviewTab
+                    JsonPreviewTab.Instance.DisplayStoreCfgJson(storeCfgJson);
                 }
             }
         }

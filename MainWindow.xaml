@@ -35,6 +35,9 @@
             <TabItem Header="Markers">
                 <local:MarkerTab/>
             </TabItem>
+            <TabItem Header="JsonPreviewTab">
+                <local:JsonPreviewTab/>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>
