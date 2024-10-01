@@ -118,7 +118,18 @@ namespace StorecfgGenerator
                 }
             }
         }
-
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (mainTabControl.SelectedItem == jsonTab)
+            {
+                if (Keyboard.FocusedElement is TextBox focusedElement)
+                {
+                    var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                    bindingExpression?.UpdateSource();
+                }
+                JsonPreviewTab.Instance.DisplayStoreCfgJson(StoreCfg.Instance.CurrentStoreCfg);
+            }
+        }
         public void GetListMarkerName()
         {
             List<string> stringList = new List<string>();

@@ -25,7 +25,7 @@
             </ToolBar>
         </ToolBarTray>
 
-        <TabControl DockPanel.Dock="Top">
+        <TabControl DockPanel.Dock="Top" x:Name="mainTabControl" SelectionChanged="MainTabControl_SelectionChanged">
             <TabItem Header="General">
                 <local:GeneralTab/>
             </TabItem>
@@ -35,7 +35,7 @@
             <TabItem Header="Markers">
                 <local:MarkerTab/>
             </TabItem>
-            <TabItem Header="JsonPreview">
+            <TabItem Header="JsonPreview" x:Name="jsonTab">
                 <local:JsonPreviewTab/>
             </TabItem>
         </TabControl>
