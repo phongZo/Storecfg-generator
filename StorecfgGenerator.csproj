@@ -124,6 +124,9 @@
     <Compile Include="Views\GeneralTab.xaml.cs">
       <DependentUpon>GeneralTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\JsonPreviewTab.xaml.cs">
+      <DependentUpon>JsonPreviewTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MarkerTab.xaml.cs">
       <DependentUpon>MarkerTab.xaml</DependentUpon>
     </Compile>
@@ -171,6 +174,10 @@
     <Page Include="Views\GeneralTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JsonPreviewTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MarkerTab.xaml">
       <SubType>Designer</SubType>
@@ -232,7 +239,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\AgilemarkIcon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="icon\ban-solid.png" />
     <Resource Include="icon\black-plus-solid.png" />

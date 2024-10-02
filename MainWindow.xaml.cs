@@ -1,18 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace StorecfgGenerator
 {
@@ -22,13 +14,20 @@ namespace StorecfgGenerator
     public partial class MainWindow : Window
     {
         public LocalSaveFile LocalSaveFile = new LocalSaveFile();
+
         public StoreCfg StoreCfg = new StoreCfg();
 
         public static MainWindow Instance { get; set; }
 
+        public GeneralTab generalTab = new GeneralTab();
+
+        public JsonPreviewTab jsonPreviewTab = new JsonPreviewTab();
+
         public bool IsDevMode { get; set; } = false;
 
         public SetupConfigJson SetupConfig { get; set; } = new SetupConfigJson();
+
+        private string currentFilePath;
 
         public MainWindow()
         {
@@ -37,11 +36,6 @@ namespace StorecfgGenerator
             StoreCfg.Instance.CurrentStoreCfg = new StoreCfgJson();
             this.SetupConfig = LocalSaveFile.Instance.LoadSetupConfig();
             MainWindow.Instance.IsDevMode = true;
-            if (this.SetupConfig == null || !LocalSaveFile.Instance.EnforeSetupSettings(this.SetupConfig))
-            {
-                int num = (int)MessageBox.Show("Invalid or not found setup.cfg", "Error", MessageBoxButton.OK, MessageBoxImage.Hand);
-                Environment.Exit(0);
-            }
             AutoMapperConfig.Configure();
             StoreCfg.Instance.CurrentStoreCfg.Profile.Markers = new Dictionary<string, MarkerJson>();
             StoreCfg.Instance.CurrentStoreCfg.Profile.Markers.Add("basemarker", new MarkerJson());
@@ -55,23 +49,87 @@ namespace StorecfgGenerator
             conditionJson.marker = "basemarker";
             StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions = new ObservableCollection<ConditionJson>();
             StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions.Add(conditionJson);
-            this.SetupTheDefaultConfig(this.SetupConfig);
             this.GetListMarkerName();
             this.DataContext = (object)StoreCfg.Instance.CurrentStoreCfg;
         }
 
-        public void SetupTheDefaultConfig(SetupConfigJson setupConfig)
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            StoreCfg.Instance.CurrentStoreCfg.DevMode = this.IsDevMode;
-            StoreCfg.Instance.CurrentStoreCfg.CustomerID = setupConfig.CustomerID;
-            StoreCfg.Instance.CurrentStoreCfg.License = setupConfig.License;
-            StoreCfg.Instance.CurrentStoreCfg.Profile.ServerSettings = setupConfig.ServerSettings;
-            if (this.IsDevMode)
-                return;
-            StoreCfg.Instance.CurrentStoreCfg.IsServerMode = false;
-            GeneralTab.Instance.ServerMode.IsChecked = false;
+            OpenAndLoadConfiguration();
         }
 
+
+        private void SaveFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (Keyboard.FocusedElement is TextBox focusedElement)
+            {
+                var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression?.UpdateSource();
+            }
+
+            if (string.IsNullOrEmpty(currentFilePath))
+            {
+                generalTab.Generate_Storecfg();
+            }
+            else
+            {
+                LocalSaveFile.Instance.SaveSettings(StoreCfg.Instance.CurrentStoreCfg, currentFilePath);
+                MessageBox.Show("File saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+
+        private void SaveAsFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (Keyboard.FocusedElement is TextBox focusedElement)
+            {
+                var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression?.UpdateSource();
+            }
+            GeneralTab.Instance.Generate_Storecfg();
+        }
+
+        public void OpenAndLoadConfiguration()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Configuration Files (*.cfg)|*.cfg|All Files (*.*)|*.*",
+                Title = "Select a Store Configuration File"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                currentFilePath = openFileDialog.FileName;
+
+                StoreCfgJson SS_new = LocalSaveFile.Instance.LoadSettings(currentFilePath);
+
+                if (SS_new == null)
+                {
+                    MessageBox.Show("Invalid store.cfg", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    StoreCfgJson storeCfgJson = LocalSaveFile.Instance.EnforceValidStoredSetting(SS_new);
+                    StoreCfg.Instance.CurrentStoreCfg = storeCfgJson;
+                    this.DataContext = storeCfgJson;
+                    this.GetListMarkerName();
+                    // show json in JsonPreviewTab
+                    JsonPreviewTab.Instance.DisplayStoreCfgJson(storeCfgJson);
+                }
+            }
+        }
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (mainTabControl.SelectedItem == jsonTab)
+            {
+                if (Keyboard.FocusedElement is TextBox focusedElement)
+                {
+                    var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                    bindingExpression?.UpdateSource();
+                }
+                JsonPreviewTab.Instance.DisplayStoreCfgJson(StoreCfg.Instance.CurrentStoreCfg);
+            }
+        }
         public void GetListMarkerName()
         {
             List<string> stringList = new List<string>();
@@ -135,6 +193,11 @@ namespace StorecfgGenerator
             {
                 return 0;
             }
+        }
+
+        private void ToolBar_ToolTipClosing(object sender, System.Windows.Controls.ToolTipEventArgs e)
+        {
+
         }
     }
 }

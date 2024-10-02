@@ -24,114 +24,67 @@
     </FrameworkElement.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <StackPanel>
-            <DockPanel HorizontalAlignment="Left" Width="820">
-                <DockPanel Width="410" HorizontalAlignment="Left">
+            <DockPanel HorizontalAlignment="Center" Width="Auto">
+                <DockPanel Width="Auto" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock HorizontalAlignment="Center" Text="Basic Settings" Foreground="#f4b518" FontWeight="Bold"/>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Show System Tray:"/>
                             <ToggleButton x:Name="Toggle2" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.ShowSystemTray}"/>
+                  IsChecked="{Binding Profile.ShowSystemTray}"/>
                         </DockPanel>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Screen Capture With Watermark:"/>
                             <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.ScreenCaptureWithWatermark}"/>
+                  IsChecked="{Binding Profile.ScreenCaptureWithWatermark}"/>
                         </DockPanel>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Screen Sharing With Watermark:"/>
                             <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.ScreenSharingWithWatermark}"/>
+                  IsChecked="{Binding Profile.ScreenSharingWithWatermark}"/>
                         </DockPanel>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Presentation Mode With Watermark:"/>
                             <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.PresentationModeWithWatermark}"/>
+                  IsChecked="{Binding Profile.PresentationModeWithWatermark}"/>
                         </DockPanel>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Message Of The Day:"/>
                             <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.MessageOfTheDay}"/>
+                  IsChecked="{Binding Profile.MessageOfTheDay}"/>
                         </DockPanel>
                     </StackPanel>
                 </DockPanel>
-                <DockPanel Width="410" HorizontalAlignment="Right">
+
+                <DockPanel Width="410" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock HorizontalAlignment="Center" Text="Advance Settings" Foreground="#f4b518" FontWeight="Bold"/>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Bypass Watermark:"/>
                             <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.BypassWatermark}"/>
+                  IsChecked="{Binding Profile.BypassWatermark}"/>
                         </DockPanel>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Encrypt Store File:"/>
                             <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.EncryptStoreFile}"/>
+                  IsChecked="{Binding Profile.EncryptStoreFile}"/>
                         </DockPanel>
                         <DockPanel Width="410" Margin="0 10 0 0" HorizontalAlignment="Center">
-                            <DockPanel Width="205" HorizontalAlignment="Right">
+                            <DockPanel Width="205" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
                                     <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
                                     <Label Content="Wait Time (s):"/>
                                 </StackPanel>
                             </DockPanel>
                             <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                     TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left"
-                     Padding="5" VerticalAlignment="Center" Text="{Binding Profile.WaitTime}"/>
+             TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Width="50" HorizontalAlignment="Left"
+             Padding="5" VerticalAlignment="Center" Text="{Binding Profile.WaitTime}"/>
                         </DockPanel>
                         <DockPanel Margin="0 10 0 0">
                             <Label Width="205" HorizontalContentAlignment="Right" Content="Fast Mode:"/>
                             <ToggleButton x:Name="FastModeToggle" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding Profile.FastMode}"/>
+                  IsChecked="{Binding Profile.FastMode}"/>
                         </DockPanel>
-                        <StackPanel x:Name="SlowModePanel" Style="{StaticResource FastModePanelStyle}">
-                            <DockPanel Width="410" Margin="0 10 0 0" HorizontalAlignment="Center">
-                                <DockPanel Width="205" HorizontalAlignment="Right">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
-                                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                                        <Label Content="Refresh Interval (s):"/>
-                                    </StackPanel>
-                                </DockPanel>
-                                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                       TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left"
-                       Padding="5" VerticalAlignment="Center" Text="{Binding Profile.SlowRefreshInterval}"/>
-                            </DockPanel>
-                        </StackPanel>
-                        <StackPanel x:Name="FastModePanel" Style="{StaticResource SlowModePanelStyle}">
-                            <DockPanel Width="410" Margin="0 10 0 0" HorizontalAlignment="Center">
-                                <DockPanel Width="205" HorizontalAlignment="Right">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
-                                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                                        <Label Content="Fast Refresh Interval (s):"/>
-                                    </StackPanel>
-                                </DockPanel>
-                                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                       TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left"
-                       Padding="5" VerticalAlignment="Center" Text="{Binding Profile.FastRefreshInterval}"/>
-                            </DockPanel>
-                            <DockPanel Width="410" Margin="0 10 0 0" HorizontalAlignment="Center">
-                                <DockPanel Width="205" HorizontalAlignment="Right">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
-                                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                                        <Label Content="Fast Refresh Duration (s):"/>
-                                    </StackPanel>
-                                </DockPanel>
-                                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                       TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left"
-                       Padding="5" VerticalAlignment="Center" Text="{Binding Profile.FastRefreshDuration}"/>
-                            </DockPanel>
-                            <DockPanel Width="410" Margin="0 10 0 0" HorizontalAlignment="Center">
-                                <DockPanel Width="205" HorizontalAlignment="Right">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
-                                        <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-                                        <Label Content="Slow Refresh Interval (s):"/>
-                                    </StackPanel>
-                                </DockPanel>
-                                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                       TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Width="100" HorizontalAlignment="Left"
-                       Padding="5" VerticalAlignment="Center" Text="{Binding Profile.SlowRefreshInterval}"/>
-                            </DockPanel>
-                        </StackPanel>
                     </StackPanel>
                 </DockPanel>
             </DockPanel>

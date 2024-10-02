@@ -15,82 +15,101 @@
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <ScrollViewer Height="250" VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="10 0 0 0">
-            <DockPanel HorizontalAlignment="Left">
-                <Label Width="Auto" Content="Grid On:"/>
-                <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10 0 0 0" Width="Auto">
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Width="Auto" Content="Grid On:"/>
+                <ToggleButton Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
                     IsChecked="{Binding CurrentEditingMarker.GridEnabled}"/>
-            </DockPanel>
-            <DockPanel Margin="0 10 0 0">
-                <Label Width="Auto" Content="Opacity:"/>
-                <Slider x:Name="GridSlider" Width="200" Margin="0 5 0 0" VerticalAlignment="Center" Minimum="0" Maximum="1"
-              SmallChange="0.01" LargeChange="0.1" Value="{Binding CurrentEditingMarker.GridOpacity}"/>
-                <TextBox BorderBrush="#d9d9d9" HorizontalAlignment="Left" Padding="3 0 0 0" Margin="7 2 0 0" Width="90"
-               VerticalAlignment="Center" Text="{Binding GridOpacity}"/>
-            </DockPanel>
-            <DockPanel Margin="0 10 0 0" HorizontalAlignment="Left">
-                <Label Width="Auto" Content="Show Timestamp:"/>
-                <ToggleButton HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
+            </Grid>
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Opacity:"/>
+                <Slider Grid.Column="1" x:Name="GridSlider" Margin="0 5 0 0" VerticalAlignment="Stretch" Minimum="0" Maximum="1"
+                    SmallChange="0.01" LargeChange="0.1" 
+                    Value="{Binding CurrentEditingMarker.GridOpacity, Mode=TwoWay}"/>
+                <TextBox Grid.Column="2" Width="120" BorderBrush="#d9d9d9" HorizontalAlignment="Stretch" Padding="3 0 0 0" Margin="7 2 30 0"
+                    VerticalAlignment="Stretch" 
+                    Text="{Binding CurrentEditingMarker.GridOpacity, Mode=TwoWay, StringFormat={}{0:F2}}"/>
+            </Grid>
+
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Width="Auto" Content="Show Timestamp:"/>
+                <ToggleButton Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
                     IsChecked="{Binding CurrentEditingMarker.GridShowTimestamp}"/>
-            </DockPanel>
-            <DockPanel Margin="0 10 0 0">
-                <Label Width="Auto" Content="Grid Shape:"/>
-                <ComboBox Width="300" HorizontalAlignment="Left" SelectedIndex="{Binding CurrentGridShapeIndex}">
+            </Grid>
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Width="Auto" Content="Grid Shape:"/>
+                <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" SelectedIndex="{Binding CurrentGridShapeIndex}" Margin="7 2 30 0">
                     <ComboBoxItem Tag="Shape" Content="Square"/>
                     <ComboBoxItem Tag="Shape" Content="Circle"/>
                     <ComboBoxItem x:Name="GridTypeLogoCombobox" Tag="Shape" Content="Logo"/>
                 </ComboBox>
-            </DockPanel>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left"
-          Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            </Grid>
+            <Grid Margin="0 10 0 0" Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Primary Logo:"/>
-                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridLogoURL}"/>
+                <Label Grid.Column="0" Content="Primary Logo:" />
+                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridLogoURL}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left"
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch"
           Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Secondary Logo:"/>
-                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridSecondaryLogoURL}"/>
+                <TextBox Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridSecondaryLogoURL}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Cell Width:"/>
+                <Label Grid.Column="0" Width="Auto" Content="Cell Width:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
-               Text="{Binding CurrentEditingMarker.CellWidth}"/>
+               Text="{Binding CurrentEditingMarker.CellWidth}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Cell Height:"/>
+                <Label Grid.Column="0" Width="Auto" Content="Cell Height:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
-               Text="{Binding CurrentEditingMarker.CellHeight}"/>
+               Text="{Binding CurrentEditingMarker.CellHeight}" Margin="7 2 30 0" />
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Grid Spacing X:"/>
+                <Label Grid.Column="0" Width="Auto" Content="Grid Spacing X:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-               Text="{Binding CurrentEditingMarker.GridSpacingX}"/>
+               Text="{Binding CurrentEditingMarker.GridSpacingX}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
@@ -98,18 +117,18 @@
                 <Label Grid.Column="0" Content="Grid Spacing Y:"/>
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-               Text="{Binding CurrentEditingMarker.GridSpacingY}"/>
+               Text="{Binding CurrentEditingMarker.GridSpacingY}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Margin Percent:"/>
                 <TextBox Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-               Text="{Binding CurrentEditingMarker.MarginPercent}"/>
+               Text="{Binding CurrentEditingMarker.MarginPercent}" Margin="7 2 30 0"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
@@ -118,18 +137,18 @@
                     <Label Grid.Column="0" Content="Grid Color 1:"/>
                     <Label Padding="0" HorizontalAlignment="Center" FontSize="10" Content="(Fill Color)"/>
                 </StackPanel>
-                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Margin="0 7 0 0" Grid.Column="1"
+                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Margin="7 2 30 0" Grid.Column="1"
                VerticalAlignment="Top" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridColor1}"
                Height="{Binding ElementName=gridSecondColor, Path=ActualHeight}"/>
             </Grid>
-            <Grid Margin="0 10 0 0" Width="680" HorizontalAlignment="Left">
+            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labelColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Grid Color 2:"/>
                 <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" x:Name="gridSecondColor"
-               Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridColor2}"/>
+               Grid.Column="1" BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.GridColor2}" Margin="7 2 30 0"/>
             </Grid>
         </StackPanel>
     </ScrollViewer>

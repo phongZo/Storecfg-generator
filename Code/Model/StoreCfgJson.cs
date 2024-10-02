@@ -114,6 +114,7 @@ namespace StorecfgGenerator
       }
     }
 
+    [JsonProperty(Order = -2)]
     public string CurrentHash { get; set; } = "";
 
     public string CustomerID { get; set; } = "";

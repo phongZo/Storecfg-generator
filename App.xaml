@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:StorecfgGenerator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style TargetType="Control">
+            <Setter Property="FontSize" Value="13" />
+        </Style>
     </Application.Resources>
 </Application>
