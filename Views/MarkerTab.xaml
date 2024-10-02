@@ -24,7 +24,7 @@
     </FrameworkElement.Resources>
     <StackPanel>
         <StackPanel x:Name="ListMarkers" Visibility="Visible">
-            <Button Click="Add_Marker_Btn_Click" Background="#f4b518" Width="90" Height="30"
+            <Button Click="Add_Marker_Btn_Click" Background="#f4b518" Width="auto" Height="30"
             HorizontalAlignment="Right">
                 <DockPanel>
                     <Image Source="../Icon/black-plus-solid.png" Height="15" Margin="0 0 5 0"/>
