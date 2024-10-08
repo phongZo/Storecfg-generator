@@ -51,6 +51,10 @@
              Visibility="Visible">
                 <local:MarkerCipherText/>
             </TabItem>
+            <TabItem Header="Cipher Shape Grid" BorderBrush="#d9d9d9"
+             Visibility="Visible">
+                <local:MarkerCipherShape/>
+            </TabItem>
             <TabItem Header="Text" BorderBrush="#d9d9d9">
                 <local:MarkerText/>
             </TabItem>

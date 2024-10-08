@@ -127,6 +127,9 @@
     <Compile Include="Views\JsonPreviewTab.xaml.cs">
       <DependentUpon>JsonPreviewTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Marker\MarkerCipherShape.xaml.cs">
+      <DependentUpon>MarkerCipherShape.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MarkerTab.xaml.cs">
       <DependentUpon>MarkerTab.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\JsonPreviewTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Marker\MarkerCipherShape.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
