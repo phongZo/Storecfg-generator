@@ -5,16 +5,19 @@
 // Assembly location: C:\AgileMomentum\AgileMark\source\StoreCfgGenerator\StorecfgGenerator.exe
 
 using AutoMapper;
-using System;
-using System.Linq.Expressions;
 
 namespace StorecfgGenerator
 {
-  public class AutoMapperConfig
-  {
-    public static void Configure()
+    public class AutoMapperConfig
     {
-      Mapper.Initialize((Action<IMapperConfigurationExpression>) (cfg => cfg.CreateMap<MarkerJson, MarkerJson>().ForMember<char[,]>((Expression<Func<MarkerJson, char[,]>>) (dest => dest.CipherTextGridTemplate), (Action<IMemberConfigurationExpression<MarkerJson, MarkerJson, char[,]>>) (opt => opt.Ignore()))));
+        public static void Configure()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<MarkerJson, MarkerJson>()
+                    .ForMember(dest => dest.CipherTextGridTemplate, opt => opt.Ignore())
+                    .ForMember(dest => dest.CipherShapeGridTemplate, opt => opt.Ignore());
+            });
+        }
     }
-  }
 }

@@ -202,17 +202,6 @@
                 <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Grid.Column="1"
                  BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.TextColor2}"/>
             </Grid>
-
-            <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Text Shadow Color:"/>
-                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Grid.Column="1"
-                 BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.TextShadowColor}"/>
-            </Grid>
         </StackPanel>
-
     </ScrollViewer>
 </UserControl>

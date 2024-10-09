@@ -21,6 +21,8 @@ namespace StorecfgGenerator
 
         public GeneralTab generalTab = new GeneralTab();
 
+        public JsonPreviewTab jsonPreviewTab = new JsonPreviewTab();
+
         public bool IsDevMode { get; set; } = false;
 
         public SetupConfigJson SetupConfig { get; set; } = new SetupConfigJson();
@@ -111,10 +113,23 @@ namespace StorecfgGenerator
                     StoreCfg.Instance.CurrentStoreCfg = storeCfgJson;
                     this.DataContext = storeCfgJson;
                     this.GetListMarkerName();
+                    // show json in JsonPreviewTab
+                    JsonPreviewTab.Instance.DisplayStoreCfgJson(storeCfgJson);
                 }
             }
         }
-
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (mainTabControl.SelectedItem == jsonTab)
+            {
+                if (Keyboard.FocusedElement is TextBox focusedElement)
+                {
+                    var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);
+                    bindingExpression?.UpdateSource();
+                }
+                JsonPreviewTab.Instance.DisplayStoreCfgJson(StoreCfg.Instance.CurrentStoreCfg);
+            }
+        }
         public void GetListMarkerName()
         {
             List<string> stringList = new List<string>();
