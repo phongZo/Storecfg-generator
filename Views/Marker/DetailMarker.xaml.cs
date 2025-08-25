@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace StorecfgGenerator
 {
@@ -30,8 +21,8 @@ namespace StorecfgGenerator
 
         public DetailMarker()
         {
-            this.InitializeComponent();
-            DetailMarker.Instance = this;
+            InitializeComponent();
+            Instance = this;
             UpdateSelectedTabVisual();
             UpdateTabContent();
         }
@@ -48,11 +39,11 @@ namespace StorecfgGenerator
 
         private void UpdateSelectedTabVisual()
         {
-            // Reset all tab buttons to default state
+            // Reset
             TabOverall.BorderBrush = Brushes.Transparent;
             TabOverall.Foreground = (Brush)new BrushConverter().ConvertFrom("#6B7280");
             TabOverall.FontWeight = FontWeights.Normal;
-            
+
             TabText.BorderBrush = Brushes.Transparent;
             TabText.Foreground = (Brush)new BrushConverter().ConvertFrom("#6B7280");
             TabText.FontWeight = FontWeights.Normal;
@@ -87,30 +78,67 @@ namespace StorecfgGenerator
         private void Cancel_Create_New_Marker(object sender, RoutedEventArgs e)
         {
             if (MarkerTab.Instance.action.Equals(1))
-                StoreCfg.Instance.CurrentStoreCfg.Profile.ObservedMarkers[this.currentEditMarkerIndex] = new KeyValuePair<string, MarkerJson>(this.EditingMarkerName, MarkerTab.Instance.StoredMarker);
+            {
+                StoreCfg.Instance.CurrentStoreCfg.Profile.ObservedMarkers[this.currentEditMarkerIndex] =
+                    new KeyValuePair<string, MarkerJson>(this.EditingMarkerName, MarkerTab.Instance.StoredMarker);
+            }
             MarkerTab.Instance.BackToListMarkerView();
         }
 
         private void Save_New_Marker(object sender, RoutedEventArgs e)
         {
-            StoreCfgJson dataContext = (StoreCfgJson)DetailMarker.Instance.DataContext;
-            if (dataContext.CurrentMarkerName.Trim().Equals(""))
+            MarkerNameBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+
+            var dataContext = DetailMarker.Instance.DataContext as StoreCfgJson;
+            var profile = StoreCfg.Instance.CurrentStoreCfg.Profile;
+            var newName = (dataContext?.CurrentMarkerName ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(newName))
             {
-                int num1 = (int)MessageBox.Show("Please fill marker's name.", "Missing Marker Name", MessageBoxButton.OK, MessageBoxImage.Hand);
+                MessageBox.Show("Please fill marker's name.", "Missing Marker Name",
+                                MessageBoxButton.OK, MessageBoxImage.Hand);
+                return;
             }
-            else if (!this.IsAllFieldsFilled)
+            if (!IsAllFieldsFilled)
             {
-                int num2 = (int)MessageBox.Show("Please fill all the required fields in marker.", "Error", MessageBoxButton.OK, MessageBoxImage.Hand);
+                MessageBox.Show("Please fill all the required fields in marker.", "Error",
+                                MessageBoxButton.OK, MessageBoxImage.Hand);
+                return;
             }
+
+            // Create
+            if (MarkerTab.Instance.action.Equals(2))
+            {
+                var marker = MarkerTab.Instance.StoredMarker ?? new MarkerJson();
+                profile.Markers[newName] = marker;
+            }
+            // Edit
             else
             {
-                if (MarkerTab.Instance.action.Equals(2))
-                    StoreCfg.Instance.CurrentStoreCfg.Profile.Markers.Add(dataContext.CurrentMarkerName, MarkerTab.Instance.StoredMarker);
+                var oldKey = this.EditingMarkerName;
+                var markerObj = dataContext.CurrentEditingMarker
+                                ?? MarkerTab.Instance.StoredMarker
+                                ?? new MarkerJson();
+
+                if (!string.Equals(oldKey, newName, StringComparison.Ordinal))
+                {
+                    if (profile.Markers.ContainsKey(oldKey))
+                        profile.Markers.Remove(oldKey);
+                    profile.Markers[newName] = markerObj;
+                }
                 else
-                    StoreCfg.Instance.CurrentStoreCfg.Profile.ObservedMarkers[this.currentEditMarkerIndex] = new KeyValuePair<string, MarkerJson>(dataContext.CurrentMarkerName, dataContext.CurrentEditingMarker);
-                MainWindow.Instance.GetListMarkerName();
-                MarkerTab.Instance.BackToListMarkerView();
+                {
+                    profile.Markers[newName] = markerObj;
+                }
+
+                profile.ObservedMarkers[this.currentEditMarkerIndex] =
+                    new KeyValuePair<string, MarkerJson>(newName, profile.Markers[newName]);
+
+                this.EditingMarkerName = newName;
             }
+
+            MainWindow.Instance.GetListMarkerName();
+            MarkerTab.Instance.BackToListMarkerView();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

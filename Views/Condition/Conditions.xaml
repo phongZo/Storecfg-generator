@@ -125,10 +125,10 @@
                                                     </Grid.ColumnDefinitions>
                                                     <TextBox Grid.Column="0"
                                                              Style="{StaticResource ModernTextBoxStyle}"
-                                                             Margin="0,6,8,0"
+                                                             Margin="0,6,4,0"
                                                              MinHeight="32"
                                                              MinWidth="72"
-                                                             VerticalContentAlignment="Center"
+                                                             VerticalContentAlignment="Stretch"
                                                              IsReadOnly="True"
                                                              Focusable="False"
                                                              IsTabStop="False"
@@ -137,25 +137,25 @@
 
                                                     <TextBox Grid.Column="1"
                                                              Style="{StaticResource ModernTextBoxStyle}"
-                                                             Margin="0,6,8,0"
+                                                             Margin="0,6,2,0"
                                                              MinHeight="32"
-                                                             VerticalContentAlignment="Center"
+                                                             VerticalContentAlignment="Stretch"
                                                              Text="{Binding Domain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                                    <TextBlock Grid.Column="2" Text=":" Margin="0,6,8,0"
+                                                    <TextBlock Grid.Column="2" Text=":" Margin="0,6,2,0"
                                                                VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryColor}"/>
                                                     <TextBox Grid.Column="3"
                                                              Style="{StaticResource ModernTextBoxStyle}"
                                                              Margin="0,6,0,0"
                                                              MinHeight="32"
-                                                             VerticalContentAlignment="Center"
+                                                             VerticalContentAlignment="Stretch"
                                                              Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </Grid>
                                                 <DockPanel>
                                                     <viewsControls:TagInputControl Margin="0,6,0,0"
                                                                                    Width="400"
                                                                                    MinHeight="32"
-                                                                                   VerticalAlignment="Center"
+                                                             VerticalContentAlignment="Stretch"
                                                                                    Visibility="{Binding method, Converter={StaticResource ConditionProcessInputVisibility}}"
                                                                                    Tags="{Binding data, Converter={StaticResource StringToTagsConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
