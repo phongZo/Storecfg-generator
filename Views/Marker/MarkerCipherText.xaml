@@ -11,177 +11,182 @@
             <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    
-        <StackPanel Background="White" Margin="0">
-            <!-- All Settings in One Clean Grid -->
-            <Grid>
+
+    <StackPanel Background="White" Margin="0">
+        <!-- All Settings in One Clean Grid -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Enable Cipher Text Grid -->
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                       Text="Enable Grid" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center"/>
+            <ToggleButton Grid.Row="0" Grid.Column="1" 
+                          HorizontalAlignment="Left" 
+                          Style="{StaticResource ModernToggleButtonStyle}"
+                          IsChecked="{Binding CurrentEditingMarker.CipherTextGridEnabled}" 
+                          VerticalAlignment="Center"/>
+
+            <!-- Opacity -->
+            <TextBlock Grid.Row="1" Grid.Column="0" 
+                       Text="Opacity" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center" 
+                       Margin="0,24,0,0"/>
+            <Grid Grid.Row="1" Grid.Column="1" Margin="0,24,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                
-                <!-- Enable Cipher Text Grid -->
-                <TextBlock Grid.Row="0" Grid.Column="0" 
-                           Text="Enable Grid" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="0" Grid.Column="1" 
-                              HorizontalAlignment="Left" 
-                              Style="{StaticResource ModernToggleButtonStyle}"
-                              IsChecked="{Binding CurrentEditingMarker.CipherTextGridEnabled}" 
-                              VerticalAlignment="Center"/>
-                
-                <!-- Opacity -->
-                <TextBlock Grid.Row="1" Grid.Column="0" 
-                           Text="Opacity" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center" 
-                           Margin="0,24,0,0"/>
-                <Grid Grid.Row="1" Grid.Column="1" Margin="0,24,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                    <Slider Grid.Column="0" 
-                            x:Name="CipherTextSlider" 
-                            Margin="0,0,16,0" 
-                            VerticalAlignment="Center" 
-                            Minimum="0"
-                            Maximum="1" 
-                            SmallChange="0.01" 
-                            LargeChange="0.1"
-                            Value="{Binding CurrentEditingMarker.CipherTextGridOpacity, Mode=TwoWay}"
-                            Style="{StaticResource ModernSliderStyle}"/>
-                    <TextBox Grid.Column="1" 
-                             Style="{StaticResource ModernTextBoxStyle}" 
-                             Height="36" 
-                             HorizontalAlignment="Stretch" 
-                             VerticalAlignment="Center" 
-                             VerticalContentAlignment="Center"
-                             Text="{Binding CurrentEditingMarker.CipherTextGridOpacity, Mode=TwoWay, StringFormat={}{0:F2}}"/>
-                </Grid>
-                
-                <!-- Show Timestamp -->
-                <TextBlock Grid.Row="2" Grid.Column="0" 
-                           Text="Show Timestamp" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center" 
-                           Margin="0,24,0,0"/>
-                <ToggleButton Grid.Row="2" Grid.Column="1" 
-                              HorizontalAlignment="Left" 
-                              Style="{StaticResource ModernToggleButtonStyle}"
-                              IsChecked="{Binding CurrentEditingMarker.CipherTextGridShowTimestamp}" 
-                              VerticalAlignment="Center" 
-                              Margin="0,24,0,0"/>
-                
-                <!-- Text Angle -->
-                <TextBlock Grid.Row="3" Grid.Column="0" 
-                           Text="Text Angle" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center" 
-                           Margin="0,24,0,0"/>
-                <Grid Grid.Row="3" Grid.Column="1" Margin="0,24,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                    <Slider Grid.Column="0" 
-                            x:Name="CipherTextTextAngleSlider" 
-                            Margin="0,0,16,0" 
-                            VerticalAlignment="Center"
-                            Minimum="0" 
-                            Maximum="360" 
-                            SmallChange="1" 
-                            LargeChange="10"
-                            Value="{Binding CurrentEditingMarker.CipherTextGridAngle, Mode=TwoWay}"
-                            Style="{StaticResource ModernSliderStyle}"/>
-                    <TextBox Grid.Column="1" 
-                             Style="{StaticResource ModernTextBoxStyle}" 
-                             Height="36" 
-                             HorizontalAlignment="Stretch" 
-                             VerticalAlignment="Center" 
-                             VerticalContentAlignment="Center"
-                             Text="{Binding CurrentEditingMarker.CipherTextGridAngle, Mode=TwoWay}"/>
-                </Grid>
-                
-                <!-- Text Size -->
-                <TextBlock Grid.Row="4" Grid.Column="0" 
-                           Text="Text Size" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center" 
-                           Margin="0,24,0,0"/>
-                <TextBox Grid.Row="4" Grid.Column="1" 
-                         PreviewTextInput="TextBox_PreviewTextInput" 
-                         LostFocus="TextBox_LostFocus"
-                         TextChanged="TextBox_TextChanged" 
-                         Style="{StaticResource ModernTextBoxStyle}" 
-                         Height="36"
-                         Text="{Binding CurrentEditingMarker.CipherTextGridSize}" 
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Center" 
-                         VerticalContentAlignment="Center" 
-                         Margin="0,24,0,0"/>
-                
-                <!-- Grid Spacing X -->
-                <TextBlock Grid.Row="5" Grid.Column="0" 
-                           Text="Horizontal Spacing" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center" 
-                           Margin="0,24,0,0"/>
-                <TextBox Grid.Row="5" Grid.Column="1" 
-                         PreviewTextInput="TextBox_PreviewTextInput" 
-                         LostFocus="TextBox_LostFocus"
-                         TextChanged="TextBox_TextChanged" 
+                <Slider Grid.Column="0" 
+                        x:Name="CipherTextSlider" 
+                        Margin="0,0,16,0" 
+                        VerticalAlignment="Center" 
+                        Minimum="0"
+                        Maximum="1" 
+                        SmallChange="0.01" 
+                        LargeChange="0.1"
+                        Value="{Binding CurrentEditingMarker.CipherTextGridOpacity, Mode=TwoWay}"
+                        Style="{StaticResource ModernSliderStyle}"/>
+                <TextBox Grid.Column="1" 
                          Style="{StaticResource ModernTextBoxStyle}" 
                          Height="36" 
-                         InputScope="Number"
-                         Text="{Binding CurrentEditingMarker.CipherTextGridSpacingX}" 
-                         HorizontalAlignment="Stretch"
+                         HorizontalAlignment="Stretch" 
                          VerticalAlignment="Center" 
-                         VerticalContentAlignment="Center" 
-                         Margin="0,24,0,0"/>
-                
-                <!-- Grid Spacing Y -->
-                <TextBlock Grid.Row="6" Grid.Column="0" 
-                           Text="Vertical Spacing" 
-                           FontSize="14" 
-                           FontWeight="Medium" 
-                           Foreground="#374151" 
-                           VerticalAlignment="Center" 
-                           Margin="0,24,0,0"/>
-                <TextBox Grid.Row="6" Grid.Column="1" 
-                         PreviewTextInput="TextBox_PreviewTextInput" 
-                         LostFocus="TextBox_LostFocus"
-                         TextChanged="TextBox_TextChanged" 
-                         Style="{StaticResource ModernTextBoxStyle}" 
-                         Height="36" 
-                         InputScope="Number"
-                         Text="{Binding CurrentEditingMarker.CipherTextGridSpacingY}" 
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Center" 
-                         VerticalContentAlignment="Center" 
-                         Margin="0,24,0,0"/>
+                         VerticalContentAlignment="Center"
+                         Tag="required:Opacity"
+                         Text="{Binding CurrentEditingMarker.CipherTextGridOpacity, Mode=TwoWay, StringFormat={}{0:F2}}"/>
             </Grid>
-        </StackPanel>
+
+            <!-- Show Timestamp -->
+            <TextBlock Grid.Row="2" Grid.Column="0" 
+                       Text="Show Timestamp" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center" 
+                       Margin="0,24,0,0"/>
+            <ToggleButton Grid.Row="2" Grid.Column="1" 
+                          HorizontalAlignment="Left" 
+                          Style="{StaticResource ModernToggleButtonStyle}"
+                          IsChecked="{Binding CurrentEditingMarker.CipherTextGridShowTimestamp}" 
+                          VerticalAlignment="Center" 
+                          Margin="0,24,0,0"/>
+
+            <!-- Text Angle -->
+            <TextBlock Grid.Row="3" Grid.Column="0" 
+                       Text="Text Angle" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center" 
+                       Margin="0,24,0,0"/>
+            <Grid Grid.Row="3" Grid.Column="1" Margin="0,24,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0" 
+                        x:Name="CipherTextTextAngleSlider" 
+                        Margin="0,0,16,0" 
+                        VerticalAlignment="Center"
+                        Minimum="0" 
+                        Maximum="360" 
+                        SmallChange="1" 
+                        LargeChange="10"
+                        Value="{Binding CurrentEditingMarker.CipherTextGridAngle, Mode=TwoWay}"
+                        Style="{StaticResource ModernSliderStyle}"/>
+                <TextBox Grid.Column="1" 
+                         Style="{StaticResource ModernTextBoxStyle}" 
+                         Height="36" 
+                         HorizontalAlignment="Stretch" 
+                         VerticalAlignment="Center" 
+                         VerticalContentAlignment="Center"
+                         Tag="required:Text Angle"
+                         Text="{Binding CurrentEditingMarker.CipherTextGridAngle, Mode=TwoWay}"/>
+            </Grid>
+
+            <!-- Text Size -->
+            <TextBlock Grid.Row="4" Grid.Column="0" 
+                       Text="Text Size" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center" 
+                       Margin="0,24,0,0"/>
+            <TextBox Grid.Row="4" Grid.Column="1" 
+                     PreviewTextInput="TextBox_PreviewTextInput" 
+                     LostFocus="TextBox_LostFocus"
+                     TextChanged="TextBox_TextChanged" 
+                     Style="{StaticResource ModernTextBoxStyle}" 
+                     Height="36"
+                     Tag="required:Text Size"
+                     Text="{Binding CurrentEditingMarker.CipherTextGridSize}" 
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center" 
+                     VerticalContentAlignment="Center" 
+                     Margin="0,24,0,0"/>
+
+            <!-- Grid Spacing X -->
+            <TextBlock Grid.Row="5" Grid.Column="0" 
+                       Text="Horizontal Spacing" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center" 
+                       Margin="0,24,0,0"/>
+            <TextBox Grid.Row="5" Grid.Column="1" 
+                     PreviewTextInput="TextBox_PreviewTextInput" 
+                     LostFocus="TextBox_LostFocus"
+                     TextChanged="TextBox_TextChanged" 
+                     Style="{StaticResource ModernTextBoxStyle}" 
+                     Height="36" 
+                     InputScope="Number"
+                     Tag="required:Horizontal Spacing"
+                     Text="{Binding CurrentEditingMarker.CipherTextGridSpacingX}" 
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center" 
+                     VerticalContentAlignment="Center" 
+                     Margin="0,24,0,0"/>
+
+            <!-- Grid Spacing Y -->
+            <TextBlock Grid.Row="6" Grid.Column="0" 
+                       Text="Vertical Spacing" 
+                       FontSize="14" 
+                       FontWeight="Medium" 
+                       Foreground="#374151" 
+                       VerticalAlignment="Center" 
+                       Margin="0,24,0,0"/>
+            <TextBox Grid.Row="6" Grid.Column="1" 
+                     PreviewTextInput="TextBox_PreviewTextInput" 
+                     LostFocus="TextBox_LostFocus"
+                     TextChanged="TextBox_TextChanged" 
+                     Style="{StaticResource ModernTextBoxStyle}" 
+                     Height="36" 
+                     InputScope="Number"
+                     Tag="required:Vertical Spacing"
+                     Text="{Binding CurrentEditingMarker.CipherTextGridSpacingY}" 
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center" 
+                     VerticalContentAlignment="Center" 
+                     Margin="0,24,0,0"/>
+        </Grid>
+    </StackPanel>
 </UserControl>

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Linq;
 
 namespace StorecfgGenerator
 {
@@ -12,13 +11,58 @@ namespace StorecfgGenerator
     /// </summary>
     public partial class MarkerText : UserControl
     {
-        public MarkerText() => InitializeComponent();
-
         private static readonly string[] Tokens = new[]
         {
             "{Username}", "{MachineName}", "{FirstName}", "{LastName}", "{DisplayName}",
             "{Email}", "{ShortDate}", "{LongDate}", "{ShortTime}", "{LongTime}", "{CustomDateTime}"
         };
+
+        private readonly List<TextBox> _registeredLocal = new List<TextBox>();
+
+        public MarkerText()
+        {
+            InitializeComponent();
+            Loaded += MarkerText_Loaded;
+            Unloaded += MarkerText_Unloaded;
+        }
+
+        private void MarkerText_Loaded(object sender, RoutedEventArgs e)
+        {
+            ScanAndRegisterRequired(this);
+        }
+
+        private void MarkerText_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (DetailMarker.Instance != null)
+            {
+                foreach (var tb in _registeredLocal)
+                    DetailMarker.Instance.UnregisterRequired(tb);
+            }
+            _registeredLocal.Clear();
+        }
+        /// <summary>
+        /// Find TextBox in visual tree has Tag = "required:Label"
+        /// và register in DetailMarker.Instance.
+        /// </summary>
+        private void ScanAndRegisterRequired(DependencyObject parent)
+        {
+            if (parent == null || DetailMarker.Instance == null) return;
+
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is TextBox tb && tb.Tag is string tag && tag.StartsWith("required:"))
+                {
+                    string label = tag.Substring("required:".Length).Trim();
+                    DetailMarker.Instance.RegisterRequired(tb, label);
+                    _registeredLocal.Add(tb);
+                }
+
+                ScanAndRegisterRequired(child);
+            }
+        }
 
         private void ShowSuggestions()
         {
@@ -55,13 +99,19 @@ namespace StorecfgGenerator
             TextToDisplayBox.Text = text.Insert(insertIndex, token);
             TextToDisplayBox.CaretIndex = insertIndex + token.Length;
             HideSuggestions();
+
+            DetailMarker.Instance?.TouchRequired(TextToDisplayBox);
         }
 
         private void TextToDisplayBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!(sender is TextBox tb)) return;
-            if (tb.Text?.EndsWith("{") == true)
-                ShowSuggestions();
+            if (sender is TextBox tb)
+            {
+                if (tb.Text?.EndsWith("{") == true)
+                    ShowSuggestions();
+
+                DetailMarker.Instance?.TouchRequired(tb);
+            }
         }
 
         private void TextToDisplayBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -121,75 +171,43 @@ namespace StorecfgGenerator
                 }
                 return true;
             }
-
             return false;
         }
 
         private void SuggestionList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // Ensure the item under mouse becomes selected before insertion
-            if (sender is ListBox listBox)
+            if (sender is ListBox listBox && e.OriginalSource is FrameworkElement element && element.DataContext != null)
             {
-                var element = e.OriginalSource as FrameworkElement;
-                if (element != null)
-                {
-                    var container = element.DataContext;
-                    if (container != null)
-                    {
-                        listBox.SelectedItem = container;
-                        InsertSelectedToken();
-                        e.Handled = true;
-                    }
-                }
+                listBox.SelectedItem = element.DataContext;
+                InsertSelectedToken();
+                e.Handled = true;
             }
         }
 
         private void TextToDisplayBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             HideSuggestions();
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!(sender is TextBox textBox))
-                return;
-            ValidateTextBox(textBox);
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is TextBox textBox))
-                return;
-            ValidateTextBox(textBox);
-        }
-
-        private void ValidateTextBox(TextBox textBox)
-        {
-            if (textBox.Text.Trim().Equals(""))
-                textBox.Dispatcher.Invoke((Action)(() =>
-                {
-                    textBox.BorderBrush = (Brush)Brushes.Red;
-                    textBox.BorderThickness = new Thickness(1.0);
-                    textBox.InvalidateVisual();
-                    DetailMarker.Instance.IsAllFieldsFilled = false;
-                }));
-            else
-                textBox.Dispatcher.Invoke((Action)(() =>
-                {
-                    textBox.BorderBrush = (Brush)new BrushConverter().ConvertFrom((object)"#d9d9d9");
-                    textBox.BorderThickness = new Thickness(1.0);
-                    textBox.InvalidateVisual();
-                    DetailMarker.Instance.IsAllFieldsFilled = true;
-                }));
+            if (sender is TextBox tb)
+                DetailMarker.Instance?.TouchRequired(tb);
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (IsNumeric(e.Text))
-                return;
+            if (int.TryParse(e.Text, out _)) return;
             e.Handled = true;
         }
 
-        private bool IsNumeric(string text) => int.TryParse(text, out int _);
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb)
+                DetailMarker.Instance?.TouchRequired(tb);
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox tb)
+                DetailMarker.Instance?.TouchRequired(tb);
+        }
     }
 }

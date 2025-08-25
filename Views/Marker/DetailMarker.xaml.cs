@@ -17,7 +17,9 @@ namespace StorecfgGenerator
 
         public static DetailMarker Instance { get; set; }
 
-        public bool IsAllFieldsFilled { get; set; } = true;
+        private readonly HashSet<TextBox> _requiredBoxes = new HashSet<TextBox>();
+        private readonly Dictionary<TextBox, string> _requiredLabels = new Dictionary<TextBox, string>();
+        public bool AreRequiredFieldsFilled { get; private set; } = true;
 
         public DetailMarker()
         {
@@ -25,6 +27,116 @@ namespace StorecfgGenerator
             Instance = this;
             UpdateSelectedTabVisual();
             UpdateTabContent();
+
+            if (FindName("MarkerNameBox") is TextBox nameBox)
+            {
+                RegisterRequired(nameBox, "Marker Name");
+            }
+        }
+
+        public void RegisterRequired(TextBox box, string label)
+        {
+            if (box == null || string.IsNullOrWhiteSpace(label)) return;
+
+            if (_requiredBoxes.Add(box))
+            {
+                _requiredLabels[box] = label;
+                box.TextChanged += RequiredBox_TextChanged;
+                box.LostFocus += RequiredBox_LostFocus;
+                UpdateOneRequired(box);
+                ReevaluateRequired();
+            }
+            else
+            {
+                _requiredLabels[box] = label;
+            }
+        }
+
+        public void UnregisterRequired(TextBox box)
+        {
+            if (box == null) return;
+            if (_requiredBoxes.Remove(box))
+            {
+                _requiredLabels.Remove(box);
+                box.TextChanged -= RequiredBox_TextChanged;
+                box.LostFocus -= RequiredBox_LostFocus;
+                ReevaluateRequired();
+            }
+        }
+
+        public void TouchRequired(TextBox box)
+        {
+            if (box == null) return;
+            if (_requiredBoxes.Contains(box))
+            {
+                UpdateOneRequired(box);
+                ReevaluateRequired();
+            }
+        }
+
+        private void RequiredBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                UpdateOneRequired(tb);
+                ReevaluateRequired();
+            }
+        }
+
+        private void RequiredBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                UpdateOneRequired(tb);
+                ReevaluateRequired();
+            }
+        }
+
+        private void UpdateOneRequired(TextBox box)
+        {
+            bool isVisible = box.IsVisible && box.Visibility == Visibility.Visible;
+            bool ok = !string.IsNullOrWhiteSpace(box.Text);
+
+            if (isVisible && !ok)
+            {
+                box.BorderBrush = Brushes.Red;
+                box.BorderThickness = new Thickness(1.0);
+            }
+            else
+            {
+                box.BorderBrush = (Brush)new BrushConverter().ConvertFrom("#d9d9d9");
+                box.BorderThickness = new Thickness(1.0);
+            }
+            box.InvalidateVisual();
+        }
+
+        private void ReevaluateRequired()
+        {
+            bool allOk = true;
+            foreach (var tb in _requiredBoxes)
+            {
+                if (!(tb.IsVisible && tb.Visibility == Visibility.Visible)) continue;
+
+                if (string.IsNullOrWhiteSpace(tb.Text))
+                {
+                    allOk = false;
+                    break;
+                }
+            }
+            AreRequiredFieldsFilled = allOk;
+        }
+
+        private List<string> GetMissingRequiredLabels()
+        {
+            var list = new List<string>();
+            foreach (var tb in _requiredBoxes)
+            {
+                if (!(tb.IsVisible && tb.Visibility == Visibility.Visible)) continue;
+
+                if (string.IsNullOrWhiteSpace(tb.Text) && _requiredLabels.TryGetValue(tb, out var label))
+                    list.Add(label);
+            }
+            return list;
         }
 
         private void TabButton_Click(object sender, RoutedEventArgs e)
@@ -87,7 +199,20 @@ namespace StorecfgGenerator
 
         private void Save_New_Marker(object sender, RoutedEventArgs e)
         {
-            MarkerNameBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+            foreach (var tb in _requiredBoxes)
+                tb.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+
+            if (FindName("MarkerNameBox") is TextBox nameBox)
+                nameBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+
+            ReevaluateRequired();
+            if (!AreRequiredFieldsFilled)
+            {
+                var missing = GetMissingRequiredLabels();
+                string msg = "Please fill all required fields.\nMissing: " + string.Join(", ", missing);
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Hand);
+                return;
+            }
 
             var dataContext = DetailMarker.Instance.DataContext as StoreCfgJson;
             var profile = StoreCfg.Instance.CurrentStoreCfg.Profile;
@@ -96,12 +221,6 @@ namespace StorecfgGenerator
             if (string.IsNullOrWhiteSpace(newName))
             {
                 MessageBox.Show("Please fill marker's name.", "Missing Marker Name",
-                                MessageBoxButton.OK, MessageBoxImage.Hand);
-                return;
-            }
-            if (!IsAllFieldsFilled)
-            {
-                MessageBox.Show("Please fill all the required fields in marker.", "Error",
                                 MessageBoxButton.OK, MessageBoxImage.Hand);
                 return;
             }
@@ -116,7 +235,7 @@ namespace StorecfgGenerator
             else
             {
                 var oldKey = this.EditingMarkerName;
-                var markerObj = dataContext.CurrentEditingMarker
+                var markerObj = dataContext?.CurrentEditingMarker
                                 ?? MarkerTab.Instance.StoredMarker
                                 ?? new MarkerJson();
 
@@ -143,36 +262,12 @@ namespace StorecfgGenerator
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!(sender is TextBox textBox))
-                return;
-            this.ValidateTextBox(textBox);
+            if (sender is TextBox tb) TouchRequired(tb);
         }
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (!(sender is TextBox textBox))
-                return;
-            this.ValidateTextBox(textBox);
-        }
-
-        private void ValidateTextBox(TextBox textBox)
-        {
-            if (textBox.Text.Trim().Equals(""))
-                textBox.Dispatcher.Invoke((Action)(() =>
-                {
-                    textBox.BorderBrush = (Brush)Brushes.Red;
-                    textBox.BorderThickness = new Thickness(1.0);
-                    textBox.InvalidateVisual();
-                    this.IsAllFieldsFilled = false;
-                }));
-            else
-                textBox.Dispatcher.Invoke((Action)(() =>
-                {
-                    textBox.BorderBrush = (Brush)new BrushConverter().ConvertFrom((object)"#d9d9d9");
-                    textBox.BorderThickness = new Thickness(1.0);
-                    textBox.InvalidateVisual();
-                    this.IsAllFieldsFilled = true;
-                }));
+            if (sender is TextBox tb) TouchRequired(tb);
         }
     }
 }
