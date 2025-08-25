@@ -83,7 +83,7 @@ namespace StorecfgGenerator
                     if (string.IsNullOrWhiteSpace(usedIn)) usedIn = "some conditions";
 
                     MessageBox.Show(
-                        $"Cannot delete marker \"{markerName}\" because it is being used in {usedIn}.\n",
+                        $"Cannot delete marker \"{markerName}\" because it is being used in condition \"{usedIn}\".",
                         "Marker is in use",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning
