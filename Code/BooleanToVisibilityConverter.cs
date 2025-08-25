@@ -15,7 +15,21 @@ namespace StorecfgGenerator
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-      return value is bool flag ? (object) (Visibility) (flag ? 0 : 2) : (object) Visibility.Collapsed;
+      bool isInverse = parameter != null && parameter.ToString().Equals("Inverse", StringComparison.OrdinalIgnoreCase);
+      
+      if (value is bool boolValue)
+      {
+        if (isInverse)
+        {
+          return boolValue ? Visibility.Collapsed : Visibility.Visible;
+        }
+        else
+        {
+          return boolValue ? Visibility.Visible : Visibility.Collapsed;
+        }
+      }
+      
+      return Visibility.Collapsed;
     }
 
     public object ConvertBack(

@@ -8,211 +8,228 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../CustomElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
             <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <ScrollViewer Height="auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <StackPanel Margin="10 0 0 0" VerticalAlignment="Stretch">
-            <Grid Margin="0 10 0 0">
+    
+    <StackPanel Margin="0" Background="{StaticResource BackgroundColor}" VerticalAlignment="Top">
+            <!-- Text Settings -->
+            <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Text On:"/>
-                <ToggleButton Style="{StaticResource CommonToggleButtonStyle}"
-                      IsChecked="{Binding CurrentEditingMarker.TextEnabled}" 
-                      Grid.Column="1" />
-            </Grid>
-
-            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Label Content="Opacity:" Grid.Column="0"/>
-                <Slider x:Name="TextSlider" Minimum="0" Maximum="1"
-                    SmallChange="0.01" LargeChange="0.1" 
-                    Value="{Binding CurrentEditingMarker.TextOpacity, Mode=TwoWay}" 
-                    Grid.Column="1" 
-                    HorizontalAlignment="Stretch"
-                    Margin="5 0"/>
-                <TextBox BorderBrush="#d9d9d9" Width="120" Padding="3 0 0 0" Margin="5 0 30 0"
-                    HorizontalAlignment="Stretch" 
-                    Text="{Binding CurrentEditingMarker.TextOpacity, Mode=TwoWay}" 
-                    Grid.Column="2" />
-            </Grid>
-
-
-            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <Label Content="Text To Display:" VerticalAlignment="Center" Grid.Column="0"/>
-
-                <TextBox Height="Auto" MinHeight="20" BorderBrush="#d9d9d9" 
-                   InputScope="Number" 
-                   Text="{Binding CurrentEditingMarker.TextFormat}" 
-                   Margin="5 0 30 0"
-                   Grid.Column="1" HorizontalAlignment="Stretch">
-                </TextBox>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Text On -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Text On:" FontWeight="Medium" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource ModernToggleButtonStyle}"
+                             IsChecked="{Binding CurrentEditingMarker.TextEnabled}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                
+                <!-- Opacity -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Opacity:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"/>
+                <Grid Grid.Row="1" Grid.Column="1" Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Grid.Column="0" x:Name="TextSlider" Minimum="0" Maximum="1"
+                            SmallChange="0.01" LargeChange="0.1"
+                            TickFrequency="0.01" IsSnapToTickEnabled="True"
+                            Value="{Binding CurrentEditingMarker.TextOpacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="0,0,8,0" VerticalAlignment="Center"
+                            Style="{StaticResource ModernSliderStyle}"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Width="80" 
+                            Height="28" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                            Text="{Binding CurrentEditingMarker.TextOpacity, Mode=TwoWay, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid>
             </Grid>
 
-
-            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
+            <!-- Text Content -->
+            <Grid Margin="0,16,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Text Size:"/>
-                <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                 TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-                 Margin="5 0 30 0"
-                 Text="{Binding CurrentEditingMarker.TextSize}"/>
+                
+                <Label Content="Text To Display:" VerticalAlignment="Center" Grid.Column="0" FontWeight="Medium"/>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="TextToDisplayBox" Height="28" Style="{StaticResource ModernTextBoxStyle}"
+                             Text="{Binding CurrentEditingMarker.TextFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                             TextChanged="TextToDisplayBox_TextChanged"
+                             PreviewKeyDown="TextToDisplayBox_PreviewKeyDown"
+                             LostKeyboardFocus="TextToDisplayBox_LostKeyboardFocus"/>
+                    <Popup x:Name="SuggestionPopup" Placement="Bottom" StaysOpen="True"
+                           AllowsTransparency="True" Focusable="False" PlacementTarget="{Binding ElementName=TextToDisplayBox}">
+                        <Border Background="White" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" CornerRadius="6">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="2" Opacity="0.12" BlurRadius="8"/>
+                            </Border.Effect>
+                            <ListBox x:Name="SuggestionList" Width="{Binding ElementName=TextToDisplayBox, Path=ActualWidth}"
+                                     SelectionMode="Single" PreviewMouseLeftButtonDown="SuggestionList_PreviewMouseLeftButtonDown"/>
+                        </Border>
+                    </Popup>
+                </Grid>
             </Grid>
-            <Grid Margin="0 10 0 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
 
-                <Label Content="Text Angle:" Grid.Column="0"/>
-                <Slider x:Name="TextAngleSlider" HorizontalAlignment="Stretch" Minimum="0"
-                    Maximum="360" SmallChange="1" LargeChange="10" 
-                    Value="{Binding CurrentEditingMarker.TextAngle, Mode=TwoWay}" 
-                    Grid.Column="1" Margin="5 0"/>
-                <TextBox BorderBrush="#d9d9d9" Width="120" Padding="3 0 0 0" Margin="5 0 30 0" 
-                    Height="auto" HorizontalAlignment="Stretch" 
-                    Text="{Binding CurrentEditingMarker.TextAngle, Mode=TwoWay}" 
-                    Grid.Column="2"/>
-            </Grid>
-            <Grid Margin="5 15 0 0" Height="Auto" HorizontalAlignment="Stretch">
+            <!-- Text Appearance -->
+            <Grid Margin="0,16,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Width="Auto" Content="Text Align By:" Padding="0" VerticalContentAlignment="Top" Grid.Column="0"/>
-                <StackPanel Margin="5 0 0 0" Grid.Column="1" Orientation="Horizontal">
-                    <RadioButton x:Name="RadioTextTypeSpacing" Content="Spacing" GroupName="TextStyle"
-                     IsChecked="{Binding CurrentEditingMarker.TextSpacingEnabled}"/>
-                    <RadioButton x:Name="RadioTextTypeDynamic" Margin="10 0 0 0" IsChecked="True" Content="Column x Row" GroupName="TextStyle"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Text Size -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Text Size:" FontWeight="Medium" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
+                         TextChanged="TextBox_TextChanged" Style="{StaticResource ModernTextBoxStyle}" Height="28"
+                         InputScope="Number" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                         Text="{Binding CurrentEditingMarker.TextSize}"/>
+                
+                <!-- Text Angle -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Text Angle:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"/>
+                <Grid Grid.Row="1" Grid.Column="1" Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Grid.Column="0" x:Name="TextAngleSlider" HorizontalAlignment="Stretch" Minimum="0"
+                            Maximum="360" SmallChange="1" LargeChange="10" 
+                            Value="{Binding CurrentEditingMarker.TextAngle, Mode=TwoWay}" 
+                            Margin="0,0,8,0" VerticalAlignment="Center"
+                            Style="{StaticResource ModernSliderStyle}"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Width="80" 
+                            Height="28" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                            Text="{Binding CurrentEditingMarker.TextAngle, Mode=TwoWay}"/>
+                </Grid>
+
+                <!-- Text Align By -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Text Align By:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"/>
+                <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,16,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <RadioButton Content="Spacing" Style="{StaticResource ModernRadioButtonStyle}" 
+                                IsChecked="{Binding CurrentEditingMarker.TextSpacingEnabled}" 
+                                Margin="0,0,16,0" VerticalAlignment="Center"/>
+                    <RadioButton Content="Column x Row" Style="{StaticResource ModernRadioButtonStyle}" 
+                                IsChecked="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource InverseBooleanConverter}}" 
+                                VerticalAlignment="Center"/>
                 </StackPanel>
+
+                <!-- Text Columns (shown ONLY when Column x Row is selected) -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Text Columns:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"
+                       Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28" Margin="0,16,0,0"
+                         Text="{Binding CurrentEditingMarker.TextCols, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+
+                <!-- Text Rows (shown ONLY when Column x Row is selected) -->
+                <Label Grid.Row="4" Grid.Column="0" Content="Text Rows:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"
+                       Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28" Margin="0,16,0,0"
+                         Text="{Binding CurrentEditingMarker.TextRows, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+
             </Grid>
 
-            <Grid x:Name="TextTypeDynamic"
-      Visibility="{Binding ElementName=RadioTextTypeDynamic, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch" Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Text Columns:"/>
-                    <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                 TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
-                 Text="{Binding CurrentEditingMarker.TextCols}"/>
-                </Grid>
-
-                <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch" Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Text Rows:"/>
-                    <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                 TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9"
-                 Text="{Binding CurrentEditingMarker.TextRows}"/>
-                </Grid>
-            </Grid>
-
-            <Grid x:Name="TextTypeSpacing" Margin="0 10 0 0"
-      Visibility="{Binding ElementName=RadioTextTypeSpacing, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- Text Spacing Settings -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
-                <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch" Grid.Row="0">
+                
+                <!-- Text Spacing X (Spacing mode only) -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Text Spacing X:" FontWeight="Medium" VerticalAlignment="Center"
+                       Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28"
+                         Text="{Binding CurrentEditingMarker.TextSpacingX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                         PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
+                         InputScope="Number"
+                         Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                
+                <!-- Text Spacing Y (Spacing mode only) -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Text Spacing Y:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"
+                       Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28"
+                         Text="{Binding CurrentEditingMarker.TextSpacingY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                         PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
+                         InputScope="Number" Margin="0,16,0,0"
+                         Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                
+                <!-- Text Adjustment (Spacing mode only) -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Text Adjustment:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"
+                       Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,16,0,0" Orientation="Vertical" VerticalAlignment="Center"
+                            Visibility="{Binding CurrentEditingMarker.TextSpacingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ToggleButton Style="{StaticResource ModernToggleButtonStyle}"
+                                 IsChecked="{Binding CurrentEditingMarker.TextAdjustment}" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock Text="Auto adjust Text Spacing in case text is overlapped." 
+                               FontSize="11" Foreground="Gray" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+                
+                <!-- Text Color 1 (show in both Spacing and Column x Row modes) -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Text Color 1:" FontWeight="Medium" VerticalAlignment="Center"/>
+                <Grid Grid.Row="3" Grid.Column="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="24"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Text Spacing X:"/>
-                    <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                 TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-                 Text="{Binding CurrentEditingMarker.TextSpacingX}"/>
+                    <Border Grid.Column="0" Width="24" Height="24" Background="{Binding CurrentEditingMarker.TextColor1}" 
+                            BorderBrush="{StaticResource BorderColor}" BorderThickness="1" CornerRadius="2"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28" Margin="8,0,0,0"
+                             Text="{Binding CurrentEditingMarker.TextColor1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                 </Grid>
-
-                <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch" Grid.Row="1">
+                
+                <!-- Text Color 2 (show in both Spacing and Column x Row modes) -->
+                <Label Grid.Row="4" Grid.Column="0" Content="Text Color 2:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"/>
+                <Grid Grid.Row="4" Grid.Column="1" Margin="0,16,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="24"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Text Spacing Y:"/>
-                    <TextBox PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
-                 TextChanged="TextBox_TextChanged" Grid.Column="1" BorderBrush="#d9d9d9" InputScope="Number"
-                 Text="{Binding CurrentEditingMarker.TextSpacingY}"/>
+                    <Border Grid.Column="0" Width="24" Height="24" Background="{Binding CurrentEditingMarker.TextColor2}" 
+                            BorderBrush="{StaticResource BorderColor}" BorderThickness="1" CornerRadius="2"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28" Margin="8,0,0,0"
+                             Text="{Binding CurrentEditingMarker.TextColor2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                 </Grid>
-
-                <Grid Margin="5 10 0 0" HorizontalAlignment="Left" Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Text Adjustment:" Padding="0"/>
-                    <StackPanel Margin="5 0 0 0">
-                        <ToggleButton Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding CurrentEditingMarker.TextAdjustment}"/>
-                        <Label FontSize="10" Foreground="#999" Width="Auto"
-                   Content="Auto adjust Text Spacing in case text is overlapped."/>
-                    </StackPanel>
-                </Grid>
-            </Grid>
-
-
-            <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Text Color 1:"/>
-                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Grid.Column="1"
-                 BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.TextColor1}"/>
-            </Grid>
-
-            <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Text Color 2:"/>
-                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Grid.Column="1"
-                 BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.TextColor2}"/>
-            </Grid>
-
-            <Grid Margin="0 10 30 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Text Shadow Color:"/>
-                <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Grid.Column="1"
-                 BorderBrush="#d9d9d9" Text="{Binding CurrentEditingMarker.TextShadowColor}"/>
+                
+                <!-- Text Blur Radius (show in both Spacing and Column x Row modes) -->
+                <Label Grid.Row="5" Grid.Column="0" Content="Text Blur Radius:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28"
+                         Text="{Binding CurrentEditingMarker.TextBlurRadius, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                         PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged"
+                         InputScope="Number" Margin="0,16,0,0"/>
             </Grid>
         </StackPanel>
-
-    </ScrollViewer>
 </UserControl>

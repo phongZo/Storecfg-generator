@@ -22,6 +22,7 @@ namespace StorecfgGenerator
     {
         public int currentEditMarkerIndex;
         public string EditingMarkerName;
+        private int _selectedTabIndex = 0;
 
         public static DetailMarker Instance { get; set; }
 
@@ -31,6 +32,56 @@ namespace StorecfgGenerator
         {
             this.InitializeComponent();
             DetailMarker.Instance = this;
+            UpdateSelectedTabVisual();
+            UpdateTabContent();
+        }
+
+        private void TabButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string tagString && int.TryParse(tagString, out int tabIndex))
+            {
+                _selectedTabIndex = tabIndex;
+                UpdateSelectedTabVisual();
+                UpdateTabContent();
+            }
+        }
+
+        private void UpdateSelectedTabVisual()
+        {
+            // Reset all tab buttons to default state
+            TabOverall.BorderBrush = Brushes.Transparent;
+            TabOverall.Foreground = (Brush)new BrushConverter().ConvertFrom("#6B7280");
+            TabOverall.FontWeight = FontWeights.Normal;
+            
+            TabText.BorderBrush = Brushes.Transparent;
+            TabText.Foreground = (Brush)new BrushConverter().ConvertFrom("#6B7280");
+            TabText.FontWeight = FontWeights.Normal;
+
+            // Set selected tab style with bottom border indicator
+            Button selectedButton;
+            if (_selectedTabIndex == 0)
+                selectedButton = TabOverall;
+            else if (_selectedTabIndex == 1)
+                selectedButton = TabText;
+            else
+                selectedButton = TabOverall;
+
+            selectedButton.BorderBrush = (Brush)new BrushConverter().ConvertFrom("#3B82F6");
+            selectedButton.Foreground = (Brush)new BrushConverter().ConvertFrom("#1F2937");
+            selectedButton.FontWeight = FontWeights.SemiBold;
+        }
+
+        private void UpdateTabContent()
+        {
+            UserControl content;
+            if (_selectedTabIndex == 0)
+                content = new MarkerOverall();
+            else if (_selectedTabIndex == 1)
+                content = new MarkerText();
+            else
+                content = new MarkerOverall();
+
+            TabContentPresenter.Content = content;
         }
 
         private void Cancel_Create_New_Marker(object sender, RoutedEventArgs e)

@@ -8,9 +8,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../CustomElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
             <local:SubtractConverter x:Key="SubtractConverter"/>
             <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -22,63 +19,251 @@
             <local:ConditionWaitToVisibility x:Key="ConditionWaitToVisibility"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
+    
+    <Grid Background="{StaticResource SurfaceColor}">
+        <ScrollViewer x:Name="ListMarkers" 
+                      Visibility="Collapsed" 
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="32">
     <StackPanel>
-        <StackPanel x:Name="ListMarkers" Visibility="Visible">
-            <Button Click="Add_Marker_Btn_Click" Background="#f4b518" Width="90" Height="30"
-            HorizontalAlignment="Right">
-                <DockPanel>
-                    <Image Source="../Icon/black-plus-solid.png" Height="15" Margin="0 0 5 0"/>
-                    <TextBlock Text="New Marker" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Button>
-            <Grid Margin="0 10 0 0">
+            <!-- Header Section with Button -->
+            <Grid Margin="0,0,0,32">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border Grid.Column="0" Grid.Row="0" BorderThickness="0,0,1,1" BorderBrush="Black" Background="LightGray">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Name"/>
+                
+                <!-- Header Text -->
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left">
+                    <TextBlock Text="Marker Management" 
+                               FontSize="26" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TextPrimaryColor}" 
+                               Margin="0,0,0,6"/>
+                    <TextBlock Text="Manage your observed markers and their configurations" 
+                               FontSize="14" 
+                               Foreground="{StaticResource TextMutedColor}" 
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+                
+                <!-- Add Marker Button -->
+                <Button Grid.Column="1" 
+                        Click="Add_Marker_Btn_Click" 
+                        Style="{StaticResource PrimaryButtonStyle}" 
+                        Width="140" 
+                        Height="36"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="+" FontSize="14" FontWeight="Bold" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Margin="0,0,8,0"/>
+                        <TextBlock Text="New Marker" 
+                                   VerticalAlignment="Center"
+                                   FontSize="14"/>
+                    </StackPanel>
+            </Button>
+            </Grid>
+
+            <!-- Markers List -->
+            <Border Style="{StaticResource CardStyle}" 
+                    Padding="24"
+                    Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Active Markers" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TextPrimaryColor}"
+                               Margin="0,0,0,20"/>
+                    
+                    <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+                        
+                        <!-- Table Header -->
+                        <Border Grid.Column="0" 
+                                Grid.Row="0" 
+                                Background="{StaticResource SurfaceColor}"
+                                BorderThickness="0,0,1,1"
+                                BorderBrush="{StaticResource BorderColor}"
+                                CornerRadius="6,6,0,0">
+                            <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" 
+                                       Text="Marker Name" 
+                                       Foreground="{StaticResource TextPrimaryColor}" 
+                                       FontWeight="Medium" 
+                                       FontSize="13"
+                                       Padding="20,16"/>
                 </Border>
-                <Border Grid.Column="1" Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="Black" Background="LightGray">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Actions"/>
+                        <Border Grid.Column="1" 
+                                Grid.Row="0" 
+                                Background="{StaticResource SurfaceColor}"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="{StaticResource BorderColor}"
+                                CornerRadius="0,6,6,0">
+                            <TextBlock HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center" 
+                                       Text="Actions" 
+                                       Foreground="{StaticResource TextPrimaryColor}" 
+                                       FontWeight="Medium" 
+                                       FontSize="13"
+                                       Padding="20,16"/>
                 </Border>
-                <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Profile.ObservedMarkers}">
+                        
+                        <!-- Markers Items -->
+                        <ItemsControl Grid.Row="1" 
+                                      Grid.ColumnSpan="2" 
+                                      ItemsSource="{Binding Path=Profile.ObservedMarkers}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="120"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Marker Name -->
+                                        <Border Grid.Column="0" 
+                                                BorderThickness="0,0,1,1" 
+                                                BorderBrush="{StaticResource BorderColor}" 
+                                                Background="{StaticResource BackgroundColor}"
+                                                Padding="20,16">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" BorderThickness="0,0,1,1" BorderBrush="Black">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Key}"/>
+                                                <Border Grid.Column="0" 
+                                                        Background="#F3F4F6" 
+                                                        CornerRadius="20" 
+                                                        Width="32" 
+                                                        Height="32" 
+                                                        Margin="0,0,12,0">
+                                                    <TextBlock Text="🎯" 
+                                                               FontSize="14" 
+                                                               HorizontalAlignment="Center" 
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                                <TextBlock Grid.Column="1" 
+                                                           HorizontalAlignment="Left" 
+                                                           VerticalAlignment="Center" 
+                                                           Text="{Binding Key}" 
+                                                           FontWeight="Medium"
+                                                           FontSize="14"
+                                                           Foreground="{StaticResource TextPrimaryColor}"/>
+                                            </Grid>
+                                        </Border>
+                                        
+                                        <!-- Actions -->
+                                        <Border Grid.Column="1" 
+                                                BorderThickness="0,0,0,1" 
+                                                BorderBrush="{StaticResource BorderColor}" 
+                                                Background="{StaticResource BackgroundColor}">
+                                            <StackPanel Orientation="Horizontal" 
+                                                        HorizontalAlignment="Center" 
+                                                        VerticalAlignment="Center" 
+                                                        Margin="8,0">
+                                                <Button Width="32" 
+                                                        Height="32" 
+                                                        Margin="3" 
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Cursor="Hand"
+                                                        Padding="0">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" 
+                                                                                CornerRadius="8"
+                                                                                Padding="{TemplateBinding Padding}">
+                                                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                                                            VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#F3F4F6"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter Property="Background" Value="#E5E7EB"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                    <Border Width="20" Height="20" CornerRadius="4" Background="#EBF4FF">
+                                                        <Path Data="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" 
+                                                              Fill="#3B82F6" 
+                                                              Stretch="Uniform" 
+                                                              Width="14" 
+                                                              Height="14"/>
                                 </Border>
-                                <Border Grid.Column="1" BorderThickness="0,0,0,1" BorderBrush="Black">
-                                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Image Source="../Icon/edit-button.png" Width="16" Height="16" Margin="5">
                                             <FrameworkElement.ToolTip>
-                                                <ToolTip Content="Edit"/>
+                                                        <ToolTip Content="Edit Marker"/>
                                             </FrameworkElement.ToolTip>
                                             <UIElement.InputBindings>
                                                 <MouseBinding Gesture="LeftClick"
                                     Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding Key}"/>
                                             </UIElement.InputBindings>
-                                        </Image>
-                                        <Image Source="../Icon/delete-button.png" Width="16" Height="16" Margin="5">
+                                                </Button>
+                                                <Button Width="32" 
+                                                        Height="32" 
+                                                        Margin="3" 
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Cursor="Hand"
+                                                        Padding="0">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" 
+                                                                                CornerRadius="8"
+                                                                                Padding="{TemplateBinding Padding}">
+                                                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                                                            VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#FEF2F2"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter Property="Background" Value="#FEE2E2"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                    <Border Width="20" Height="20" CornerRadius="4" Background="#FEF2F2">
+                                                        <Path Data="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" 
+                                                              Fill="#EF4444" 
+                                                              Stretch="Uniform" 
+                                                              Width="14" 
+                                                              Height="14"/>
+                                                    </Border>
                                             <FrameworkElement.ToolTip>
-                                                <ToolTip Content="Delete"/>
+                                                        <ToolTip Content="Delete Marker"/>
                                             </FrameworkElement.ToolTip>
                                             <UIElement.InputBindings>
                                                 <MouseBinding Gesture="LeftClick"
                                     Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding Key}"/>
                                             </UIElement.InputBindings>
-                                        </Image>
+                                                </Button>
                                     </StackPanel>
                                 </Border>
                             </Grid>
@@ -86,9 +271,18 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Grid>
-        </StackPanel>
-        <StackPanel x:Name="DetailMarker" Visibility="Collapsed">
+                        </StackPanel>
+            </Border>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <ScrollViewer x:Name="DetailMarker" 
+                      Visibility="Visible"
+                      VerticalScrollBarVisibility="Visible"
+                      HorizontalScrollBarVisibility="Disabled"
+                      CanContentScroll="False"
+                      Padding="0">
             <local:DetailMarker/>
-        </StackPanel>
-    </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

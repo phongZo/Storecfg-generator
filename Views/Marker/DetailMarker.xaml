@@ -8,52 +8,132 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../CustomElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
             <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
             <local:VisibleForDevMode x:Key="VisibleForDevMode"/>
+            
+            <!-- Web-Style Tab Button Style -->
+            <Style x:Key="WebTabButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                <Setter Property="Padding" Value="24,16"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Setter Property="Foreground" Value="#6B7280"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                    <Setter TargetName="ButtonBorder" Property="Background" Value="#F9FAFB"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="#1F2937"/>
+                                    <Setter TargetName="ButtonBorder" Property="Background" Value="#F3F4F6"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <StackPanel>
-        <DockPanel HorizontalAlignment="Right">
-            <Button Click="Cancel_Create_New_Marker" Background="#ffffff" Width="60" Height="30" Margin="0 0 10 0">
+    
+    <Grid Background="{StaticResource SurfaceColor}" Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Action Buttons -->
+        <DockPanel Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,0,16">
+            <Button Click="Cancel_Create_New_Marker" 
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Height="32" 
+                    Margin="0,0,12,0">
                 <TextBlock Text="Cancel" VerticalAlignment="Center"/>
             </Button>
-            <Button Click="Save_New_Marker" Background="#f4b518" Width="90" Height="30">
+            <Button Click="Save_New_Marker" 
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Width="90" Height="32">
                 <DockPanel>
-                    <Image Source="../../Icon/check-solid.png" Height="15" Margin="0 0 5 0"/>
+                    <Image Source="../../Icon/check-solid.png" Height="15" Margin="0,0,5,0"/>
                     <TextBlock Text="Save" VerticalAlignment="Center"/>
                 </DockPanel>
             </Button>
         </DockPanel>
-        <DockPanel>
-            <Label Content="*" Foreground="Red" Padding="0" FontWeight="Bold" VerticalAlignment="Center"/>
-            <Label Content="Marker Name:" FontWeight="Bold"/>
-        </DockPanel>
-        <TextBox LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" BorderBrush="#d9d9d9" Height="25"
-           Text="{Binding CurrentMarkerName}"/>
-        <Label Content="Marker Settings:" FontWeight="Bold" Margin="0 20 0 0"/>
-        <TabControl ItemContainerStyle="{StaticResource CustomTabItemStyle}" BorderThickness="1 0 0 0"
-              BorderBrush="#f4b518" TabStripPlacement="Left" Height="auto">
-            <TabItem Header="Overall" BorderBrush="#d9d9d9">
-                <local:MarkerOverall/>
-            </TabItem>
-            <TabItem Header="Logo" BorderBrush="#d9d9d9"
-             Visibility="Visible">
-                <local:MarkerLogo/>
-            </TabItem>
-            <TabItem Header="Grid" BorderBrush="#d9d9d9"
-             Visibility="Visible">
-                <local:MarkerGrid/>
-            </TabItem>
-            <TabItem Header="Cipher Text Grid" BorderBrush="#d9d9d9"
-             Visibility="Visible">
-                <local:MarkerCipherText/>
-            </TabItem>
-            <TabItem Header="Text" BorderBrush="#d9d9d9">
-                <local:MarkerText/>
-            </TabItem>
-        </TabControl>
-    </StackPanel>
+        
+        <!-- Marker Name Section -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Label Row -->
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBlock Style="{StaticResource RequiredFieldStyle}" VerticalAlignment="Center"/>
+                <Label Content="Marker Name:" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <!-- Input Row -->
+            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                     LostFocus="TextBox_LostFocus" 
+                     TextChanged="TextBox_TextChanged" 
+                     Style="{StaticResource ModernTextBoxStyle}" 
+                     Height="32"
+                     Text="{Binding CurrentMarkerName}"
+                     VerticalContentAlignment="Center"/>
+        </Grid>
+        
+        <!-- Marker Settings Label -->
+        <Label Grid.Row="2" Content="Marker Settings:" FontWeight="SemiBold" FontSize="14" Margin="0,8,0,8"/>
+        
+        <!-- Modern Web-Style Tab Control -->
+        <Grid Grid.Row="3" Margin="0,16,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Tab Navigation Bar -->
+            <Border Background="White" 
+                    BorderBrush="#E1E5E9" 
+                    BorderThickness="0,0,0,1" 
+                    Padding="0,0,0,1">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                    <Button x:Name="TabOverall" Content="Overall" Tag="0" Click="TabButton_Click"
+                            Style="{StaticResource WebTabButtonStyle}" Margin="0,0,0,0"/>
+                    <Button x:Name="TabText" Content="Text" Tag="1" Click="TabButton_Click"
+                            Style="{StaticResource WebTabButtonStyle}" Margin="0,0,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Content Area -->
+            <Border Grid.Row="1" 
+                    Background="White" 
+                    Padding="24">
+                <ContentPresenter x:Name="TabContentPresenter"/>
+            </Border>
+        </Grid>
+
+    </Grid>
 </UserControl>

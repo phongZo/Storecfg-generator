@@ -43,6 +43,14 @@ namespace StorecfgGenerator
             StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions.RemoveAt(StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions.IndexOf((ConditionJson)((FrameworkElement)sender).DataContext));
         }
 
+        private void RemoveCondition_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Image image && image.Tag is ConditionJson condition)
+            {
+                StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions.Remove(condition);
+            }
+        }
+
         private void ProcessInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Return || !(sender is TextBox textBox))

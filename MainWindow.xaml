@@ -4,40 +4,144 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StorecfgGenerator"
-        Title="Storecfg Generator" Height="850" Width="960" AllowDrop="true">
+        Title="Storecfg Generator" Height="800" Width="1200" 
+        WindowStartupLocation="CenterScreen"
+        MinHeight="600" MinWidth="800"
+        Background="{StaticResource BackgroundColor}"
+        Icon="Images/AgilemarkIcon.ico">
+    
     <Window.Resources>
-        <Style TargetType="ToolBar">
+        <!-- Modern TabControl Style -->
+        <Style x:Key="ModernTabControlStyle" TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+        
+        <!-- Minimal TabItem Style (pill design) -->
+        <Style x:Key="ModernTabItemStyle" TargetType="TabItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryColor}"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToolBar}">
-                        <ToolBarPanel IsItemsHost="True" Background="AliceBlue"/>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Background="Transparent" Margin="{TemplateBinding Margin}">
+                            <Border x:Name="Pill"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="{TemplateBinding Padding}"
+                                    Cursor="Hand">
+                                <ContentPresenter x:Name="ContentSite"
+                                                  ContentSource="Header"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Pill" Property="Background" Value="{StaticResource SurfaceColor}"/>
+                                <Setter TargetName="Pill" Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Pill" Property="Background" Value="{StaticResource SurfaceColor}"/>
+                                <Setter TargetName="Pill" Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Pill" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
     </Window.Resources>
-    <DockPanel>
-        <ToolBarTray  DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-            <ToolBar>
-                <Button Content="Open" Click="OpenFile_Click" ToolTip="Open a file" Padding="12,0,8,0"/>
-                <Button Content="Save" Click="SaveFile_Click" ToolTip="Save the current file" Padding="12,0,6,0"/>
-                <Button Content="Save As" Click="SaveAsFile_Click" ToolTip="Save the current file as a new file" Padding="12,0,12,0"/>
-            </ToolBar>
-        </ToolBarTray>
-
-        <TabControl DockPanel.Dock="Top" x:Name="mainTabControl" SelectionChanged="MainTabControl_SelectionChanged">
-            <TabItem Header="General">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Minimal Header with Logo and Title -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource BackgroundColor}" 
+                BorderBrush="{StaticResource BorderColor}"
+                BorderThickness="0,0,0,1"
+                Padding="32,20"
+                Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Logo and Title -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Image Source="Images/AgilemarkIcon.ico" 
+                           Width="28" Height="28" 
+                           Stretch="Uniform" 
+                           Margin="0,0,16,0"/>
+                    <TextBlock Text="Storecfg Generator" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TextPrimaryColor}" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                <!-- Action Buttons -->
+                <StackPanel Grid.Column="2" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Right">
+                    <Button Content="Open" 
+                            Style="{StaticResource MinimalButtonStyle}"
+                            Click="OpenFile_Click" 
+                            ToolTip="Open a file" 
+                            Margin="0,0,12,0"/>
+                    <Button Content="Save" 
+                            Style="{StaticResource MinimalButtonStyle}"
+                            Click="SaveFile_Click" 
+                            ToolTip="Save the current file" 
+                            Margin="0,0,12,0"/>
+                    <Button Content="Save As" 
+                            Style="{StaticResource MinimalButtonStyle}"
+                            Click="SaveAsFile_Click" 
+                            ToolTip="Save the current file as a new file"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Main Content Area -->
+        <TabControl Grid.Row="1" 
+                    x:Name="mainTabControl" 
+                    SelectionChanged="MainTabControl_SelectionChanged"
+                    Style="{StaticResource ModernTabControlStyle}">
+            <TabItem Header="General" Style="{StaticResource ModernTabItemStyle}">
                 <local:GeneralTab/>
             </TabItem>
-            <TabItem Header="Profile">
+            <TabItem Header="Profile" Style="{StaticResource ModernTabItemStyle}">
                 <local:ProfileTab/>
             </TabItem>
-            <TabItem Header="Markers">
+            <TabItem Header="Markers" Style="{StaticResource ModernTabItemStyle}">
                 <local:MarkerTab/>
             </TabItem>
-            <TabItem Header="Json Preview" x:Name="jsonTab">
+            <TabItem Header="Json Preview" 
+                      x:Name="jsonTab" 
+                      Style="{StaticResource ModernTabItemStyle}">
                 <local:JsonPreviewTab/>
             </TabItem>
         </TabControl>
-    </DockPanel>
+    </Grid>
 </Window>

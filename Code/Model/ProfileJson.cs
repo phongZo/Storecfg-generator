@@ -75,7 +75,54 @@ namespace StorecfgGenerator
 
     public bool ScreenSharingWithWatermark { get; set; } = false;
 
+    public bool WindowSharingWithWatermark { get; set; } = false;
+
     public bool PresentationModeWithWatermark { get; set; } = false;
+
+    public LogRotationJson LogRotation { get; set; } = new LogRotationJson();
+
+    private bool _advancedConditionCheck = false;
+    private int _numberOfRechecks = 3;
+    private int _recheckInterval = 5000;
+
+    public bool AdvancedConditionCheck 
+    { 
+        get => _advancedConditionCheck;
+        set
+        {
+            if (_advancedConditionCheck != value)
+            {
+                _advancedConditionCheck = value;
+                OnPropertyChanged(nameof(AdvancedConditionCheck));
+            }
+        }
+    }
+
+    public int NumberOfRechecks 
+    { 
+        get => _numberOfRechecks;
+        set
+        {
+            if (_numberOfRechecks != value)
+            {
+                _numberOfRechecks = value;
+                OnPropertyChanged(nameof(NumberOfRechecks));
+            }
+        }
+    }
+
+    public int RecheckInterval 
+    { 
+        get => _recheckInterval;
+        set
+        {
+            if (_recheckInterval != value)
+            {
+                _recheckInterval = value;
+                OnPropertyChanged(nameof(RecheckInterval));
+            }
+        }
+    }
 
     public bool BypassWatermark { get; set; } = false;
 

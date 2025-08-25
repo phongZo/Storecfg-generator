@@ -8,57 +8,66 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../CustomElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
             <local:TimeFormatConverter x:Key="TimeFormatConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Margin="10 0 0 0">
-            <Grid Margin="0 10 0 0">
+    
+    <StackPanel Margin="0" VerticalAlignment="Stretch" Background="{StaticResource BackgroundColor}">
+        <!-- Drawing Settings -->
+        <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Drawing On -->
+            <Label Grid.Row="0" Grid.Column="0" Content="Drawing On:" FontWeight="Medium" VerticalAlignment="Center"/>
+            <ToggleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource ModernToggleButtonStyle}"
+                         IsChecked="{Binding CurrentEditingMarker.DrawingEnabled}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            
+            <!-- Drawing Opacity -->
+            <Label Grid.Row="1" Grid.Column="0" Content="Drawing Opacity:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,16,0,0"/>
+            <Grid Grid.Row="1" Grid.Column="1" Margin="0,16,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Width="Auto" Content="Drawing On:"/>
-                <ToggleButton Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource CommonToggleButtonStyle}"
-                          IsChecked="{Binding CurrentEditingMarker.DrawingEnabled}"/>
-            </Grid>
-
-            <Grid Margin="0 10 0 0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Width="Auto" Content="Drawing Opacity:"/>
-                <Slider Grid.Column="1" x:Name="OverallSlider" Margin="0 5 0 0" VerticalAlignment="Center" Minimum="0"
-                    Maximum="1" SmallChange="0.01" LargeChange="0.1" Value="{Binding CurrentEditingMarker.Opacity}"/>
-                <TextBox Grid.Column="2" Width="120" BorderBrush="#d9d9d9" HorizontalAlignment="Stretch" Padding="3 0 0 0" Margin="7 2 30 0"
-                    VerticalAlignment="Center"
-                    Text="{Binding CurrentEditingMarker.Opacity, Mode=TwoWay, StringFormat={}{0:F2}}"/>
+                <Slider Grid.Column="0" x:Name="OverallSlider" Minimum="0" Maximum="1"
+                        SmallChange="0.01" LargeChange="0.1"
+                        TickFrequency="0.01" IsSnapToTickEnabled="True"
+                        Value="{Binding CurrentEditingMarker.Opacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0,0,8,0" VerticalAlignment="Center"
+                        Style="{StaticResource ModernSliderStyle}"/>
+                <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Width="80" 
+                        Height="28" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                        Text="{Binding CurrentEditingMarker.Opacity, Mode=TwoWay, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
+        </Grid>
 
-            <Grid Margin="0 10 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <!-- Timestamp Format -->
+        <Grid Margin="0,16,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Label Grid.Row="0" Grid.Column="0" Content="Timestamp Format:" FontWeight="Medium" VerticalAlignment="Center"/>
+            <TextBox x:Name="timeFormatTextBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="28"
+                     HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                     Text="{Binding CurrentEditingMarker.TimestampFormat, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <Label Grid.Row="0" Grid.Column="0" Content="Timestamp Format:"/>
-                <TextBox x:Name="timeFormatTextBox" Grid.Row="0" Grid.Column="1" Margin="6 0 30 0" BorderBrush="#d9d9d9"  Height="20"
-        HorizontalAlignment="Stretch" Text="{Binding CurrentEditingMarker.TimestampFormat, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Preview: " Foreground="#999" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="currentTimeTextBlock" Width="Auto" HorizontalAlignment="Left"
-        Text="{Binding ElementName=timeFormatTextBox, Path=Text, Converter={StaticResource TimeFormatConverter}}" Visibility="Collapsed"/>
-            </Grid>
-
-        </StackPanel>
-    </ScrollViewer>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Preview: " Foreground="#999" Visibility="Collapsed" Margin="0,8,0,0"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="currentTimeTextBlock" Width="Auto" HorizontalAlignment="Left"
+                       Text="{Binding ElementName=timeFormatTextBox, Path=Text, Converter={StaticResource TimeFormatConverter}}" 
+                       Visibility="Collapsed" Margin="0,8,0,0"/>
+        </Grid>
+    </StackPanel>
 </UserControl>
