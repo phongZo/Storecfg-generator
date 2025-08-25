@@ -20,7 +20,7 @@
             <local:MillisecondsToSecondsConverter x:Key="MillisecondsToSecondsConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto" 
                   HorizontalScrollBarVisibility="Auto"
                   Background="{StaticResource SurfaceColor}">
@@ -52,14 +52,14 @@
                     <TextBlock Text="Basic Settings" 
                                Style="{StaticResource SectionHeaderStyle}"/>
                     <Border Height="1" Background="{StaticResource BorderColor}" Margin="0,8,0,0"/>
-                    
+
                     <Grid Margin="-32,16,0,0" HorizontalAlignment="Center" Grid.IsSharedSizeScope="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="260"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <!-- Left Column -->
                         <Grid Grid.Column="0" Margin="-16,0,0,0">
                             <Grid.ColumnDefinitions>
@@ -93,7 +93,7 @@
                             <TextBlock Grid.Row="5" Grid.Column="0" Text="Message Of The Day:" HorizontalAlignment="Right" VerticalAlignment="Center" TextWrapping="NoWrap" Margin="0,12,12,0"/>
                             <ToggleButton Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,12,0,0" Style="{StaticResource ModernToggleButtonStyle}" IsChecked="{Binding Profile.MessageOfTheDay}"/>
                         </Grid>
-                        
+
                         <!-- Right Column -->
                         <Grid Grid.Column="2" Margin="0,0,0,0">
                             <Grid.ColumnDefinitions>
@@ -174,32 +174,32 @@
                 <StackPanel>
                     <TextBlock Text="Advanced Condition Check" 
                                Style="{StaticResource SectionHeaderStyle}"/>
-                    
+
                     <Border Height="1" Background="{StaticResource BorderColor}" Margin="0,8,0,0"/>
-                    
+
                     <!-- Advanced Condition Check Setting Field -->
                     <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
                         <TextBlock Text="Advanced Condition Check setting:" 
                                    VerticalAlignment="Center"
                                    TextWrapping="Wrap"
                                    Margin="0,0,8,0"/>
-                        
+
                         <ToggleButton Style="{StaticResource ModernToggleButtonStyle}" 
                                      IsChecked="{Binding Profile.AdvancedConditionCheck}"
                                      VerticalAlignment="Center"/>
                     </StackPanel>
-                    
+
                     <StackPanel x:Name="AdvancedConditionPanel" 
                                 Margin="0,16,0,0"
                                 Visibility="{Binding Profile.AdvancedConditionCheck, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        
+
                         <!-- Number of Rechecks -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="Number of Rechecks After Initial Condition Check:" 
                                        VerticalAlignment="Center"
                                        TextWrapping="Wrap"
                                        Margin="0,0,8,0"/>
-                            
+
                             <TextBox Style="{StaticResource ModernTextBoxStyle}" 
                                      Width="80" 
                                      MinHeight="32" 
@@ -208,14 +208,14 @@
                                      Text="{Binding Profile.NumberOfRechecks}"
                                      PreviewTextInput="TextBox_PreviewTextInput"/>
                         </StackPanel>
-                        
+
                         <!-- Recheck Interval -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="Recheck Condition Interval:" 
                                        VerticalAlignment="Center"
                                        TextWrapping="Wrap"
                                        Margin="0,0,8,0"/>
-                            
+
                             <TextBox Style="{StaticResource ModernTextBoxStyle}" 
                                      Width="80" 
                                      MinHeight="32" 
