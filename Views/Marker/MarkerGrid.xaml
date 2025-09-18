@@ -12,14 +12,14 @@
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    
+
     <StackPanel Margin="24" Background="{StaticResource BackgroundColor}">
         <!-- Grid Settings Section -->
         <Border Style="{StaticResource CardStyle}" Margin="0,0,0,24">
             <StackPanel>
                 <!-- Section Header -->
                 <TextBlock Text="Grid Settings" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,16"/>
-                
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="140"/>
@@ -30,12 +30,12 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <!-- Grid On -->
                     <Label Grid.Row="0" Grid.Column="0" Content="Grid On:" FontWeight="Medium" VerticalAlignment="Center"/>
                     <ToggleButton Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource ModernToggleButtonStyle}"
-                                 IsChecked="{Binding CurrentEditingMarker.GridEnabled}" VerticalAlignment="Center"/>
-                    
+                                  IsChecked="{Binding CurrentEditingMarker.GridEnabled}" VerticalAlignment="Center"/>
+
                     <!-- Grid Opacity -->
                     <Label Grid.Row="1" Grid.Column="0" Content="Opacity:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,20,0,0"/>
                     <Grid Grid.Row="1" Grid.Column="1" Margin="0,20,0,0">
@@ -48,14 +48,15 @@
                                 Value="{Binding CurrentEditingMarker.GridOpacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource ModernSliderStyle}"/>
                         <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="32" HorizontalAlignment="Stretch" 
-                                VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                Text="{Binding CurrentEditingMarker.GridOpacity, Mode=TwoWay, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}"/>
+                                 VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                 Tag="required:Opacity"
+                                 Text="{Binding CurrentEditingMarker.GridOpacity, Mode=TwoWay, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
-                    
+
                     <!-- Show Timestamp -->
                     <Label Grid.Row="2" Grid.Column="0" Content="Show Timestamp:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,20,0,0"/>
                     <ToggleButton Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource ModernToggleButtonStyle}"
-                                 IsChecked="{Binding CurrentEditingMarker.GridShowTimestamp}" VerticalAlignment="Center" Margin="0,20,0,0"/>
+                                  IsChecked="{Binding CurrentEditingMarker.GridShowTimestamp}" VerticalAlignment="Center" Margin="0,20,0,0"/>
                 </Grid>
             </StackPanel>
         </Border>
@@ -65,7 +66,7 @@
             <StackPanel>
                 <!-- Section Header -->
                 <TextBlock Text="Shape Configuration" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,16"/>
-                
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="140"/>
@@ -76,7 +77,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <!-- Grid Shape -->
                     <Label Grid.Row="0" Grid.Column="0" Content="Grid Shape:" FontWeight="Medium" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource WebComboBoxStyle}" 
@@ -107,22 +108,24 @@
                             </StackPanel>
                         </ComboBoxItem>
                     </ComboBox>
-                    
+
                     <!-- Primary Logo -->
                     <Label Grid.Row="1" Grid.Column="0" Content="Primary Logo:" FontWeight="Medium" VerticalAlignment="Center" 
                            Margin="0,20,0,0" Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="32" 
                              Text="{Binding CurrentEditingMarker.GridLogoURL, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0" HorizontalAlignment="Stretch"
                              VerticalAlignment="Center" VerticalContentAlignment="Center"
-                             Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    
+                             Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Tag="required:Primary Logo"/>
+
                     <!-- Secondary Logo -->
                     <Label Grid.Row="2" Grid.Column="0" Content="Secondary Logo:" FontWeight="Medium" VerticalAlignment="Center" 
                            Margin="0,20,0,0" Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Height="32" 
                              Text="{Binding CurrentEditingMarker.GridSecondaryLogoURL, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0" HorizontalAlignment="Stretch"
                              VerticalAlignment="Center" VerticalContentAlignment="Center"
-                             Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                             Visibility="{Binding ElementName=GridTypeLogoCombobox, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Tag="required:Secondary Logo"/>
                 </Grid>
             </StackPanel>
         </Border>
@@ -132,7 +135,7 @@
             <StackPanel>
                 <!-- Section Header -->
                 <TextBlock Text="Cell Dimensions" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,16"/>
-                
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="140"/>
@@ -142,7 +145,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <!-- Cell Width -->
                     <Label Grid.Row="0" Grid.Column="0" Content="Cell Width:" FontWeight="Medium" VerticalAlignment="Center"/>
                     <Grid Grid.Row="0" Grid.Column="1">
@@ -152,12 +155,13 @@
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                                  TextChanged="TextBox_TextChanged" Style="{StaticResource ModernTextBoxStyle}" Height="32"
+                                 Tag="required:Cell Width"
                                  Text="{Binding CurrentEditingMarker.CellWidth, UpdateSourceTrigger=PropertyChanged}" 
                                  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBlock Grid.Column="1" Text="px" VerticalAlignment="Center" Margin="8,0,0,0" 
                                    Foreground="{StaticResource TextMutedColor}" FontSize="12"/>
                     </Grid>
-                    
+
                     <!-- Cell Height -->
                     <Label Grid.Row="1" Grid.Column="0" Content="Cell Height:" FontWeight="Medium" VerticalAlignment="Center" Margin="0,20,0,0"/>
                     <Grid Grid.Row="1" Grid.Column="1" Margin="0,20,0,0">
@@ -167,6 +171,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus"
                                  TextChanged="TextBox_TextChanged" Style="{StaticResource ModernTextBoxStyle}" Height="32"
+                                 Tag="required:Cell Height"
                                  Text="{Binding CurrentEditingMarker.CellHeight, UpdateSourceTrigger=PropertyChanged}" 
                                  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBlock Grid.Column="1" Text="px" VerticalAlignment="Center" Margin="8,0,0,0" 

@@ -9,7 +9,7 @@
             <local:VisibleForDevMode x:Key="VisibleForDevMode"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto" 
                   Background="{StaticResource SurfaceColor}">
         <StackPanel Margin="24">
@@ -87,13 +87,12 @@
                             <Label Content="Customer ID:"/>
                         </StackPanel>
                         <TextBox Grid.Row="0" 
-                                 Grid.Column="1" 
+                                 Grid.Column="1"
+                                 Tag="required|Customer ID"
                                  Style="{StaticResource ModernTextBoxStyle}"
                                  MinHeight="32"
                                  VerticalContentAlignment="Center"
                                  Padding="8,4"
-                                 LostFocus="TextBox_LostFocus" 
-                                 TextChanged="TextBox_TextChanged"
                                  Text="{Binding CustomerID}"/>
 
                         <!-- Client ID -->
@@ -107,14 +106,13 @@
                             <Label Content="Client ID:"/>
                         </StackPanel>
                         <TextBox Grid.Row="1" 
-                                 Grid.Column="1" 
+                                 Grid.Column="1"
+                                 Tag="required|Client ID"
                                  Style="{StaticResource ModernTextBoxStyle}"
                                  MinHeight="32"
                                  VerticalContentAlignment="Center"
                                  Padding="8,4"
-                                 PreviewTextInput="TextBox_PreviewTextInput" 
-                                 LostFocus="TextBox_LostFocus"
-                                 TextChanged="TextBox_TextChanged" 
+                                 PreviewTextInput="TextBox_PreviewTextInput"
                                  Text="{Binding ClientID}"/>
 
                         <!-- License -->
@@ -128,13 +126,12 @@
                             <Label Content="License:"/>
                         </StackPanel>
                         <TextBox Grid.Row="2" 
-                                 Grid.Column="1" 
+                                 Grid.Column="1"
+                                 Tag="required|License"
                                  Style="{StaticResource ModernTextBoxStyle}"
                                  MinHeight="32"
                                  VerticalContentAlignment="Center"
                                  Padding="8,4"
-                                 LostFocus="TextBox_LostFocus" 
-                                 TextChanged="TextBox_TextChanged"
                                  Text="{Binding License}"/>
                     </Grid>
                 </StackPanel>
@@ -153,7 +150,7 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <!-- Deploy Type -->
                         <StackPanel Orientation="Horizontal" 
                                     Grid.Column="0" 
@@ -199,95 +196,122 @@
 
                         <!-- Primary Server -->
                         <StackPanel Orientation="Horizontal" 
-                                    Grid.Row="0" 
-                                    Grid.Column="0" 
-                                    Margin="0,0,16,16" 
-                                    VerticalAlignment="Center"
-                                    MinWidth="140">
+                            Grid.Row="0" 
+                            Grid.Column="0" 
+                            Margin="0,0,16,16" 
+                            VerticalAlignment="Center"
+                            MinWidth="140">
                             <TextBlock Style="{StaticResource RequiredFieldStyle}"/>
                             <Label Content="Primary Server:"/>
                         </StackPanel>
                         <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- ComboBox -->
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- Domain -->
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- dấu : -->
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- Port -->
                             </Grid.ColumnDefinitions>
+
                             <ComboBox x:Name="ComboBox1" 
-                                      Grid.Column="0"
-                                      MinHeight="32"
-                                      SelectedIndex="{Binding Protocol1, Mode=TwoWay}"
-                                      Style="{StaticResource WebComboBoxStyle}">
+                                Grid.Column="0"
+                                MinHeight="32"
+                                Width="100"
+                                HorizontalAlignment="Left"
+                                SelectedIndex="{Binding Protocol1, Mode=TwoWay}"
+                                Style="{StaticResource WebComboBoxStyle}">
                                 <ComboBoxItem>http://</ComboBoxItem>
                                 <ComboBoxItem>https://</ComboBoxItem>
                             </ComboBox>
+
                             <TextBox Grid.Column="1"
-                                     LostFocus="TextBox_LostFocus" 
-                                     TextChanged="TextBox_TextChanged" 
-                                     Style="{StaticResource ModernTextBoxStyle}"
-                                     MinHeight="32"
-                                     VerticalContentAlignment="Center"
-                                     Padding="8,4"
-                                     MinWidth="240"
-                                     HorizontalAlignment="Stretch"
-                                     Text="{Binding Domain1}"/>
-                            <TextBlock Grid.Column="2" Text=":" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       Foreground="{StaticResource TextSecondaryColor}"/>
+                                Tag="required|Primary Server (domain)"
+                                Margin="8,0,0,0"
+                                Width="160"
+                                MinHeight="32"
+                                HorizontalAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Padding="8,4"
+                                Text="{Binding Domain1}"
+                                Style="{StaticResource ModernTextBoxStyle}"/>
+
+                            <TextBlock Grid.Column="2" 
+                                Margin="8,0,0,0"
+                                Text=":" 
+                                VerticalAlignment="Center" 
+                                HorizontalAlignment="Left"
+                                Foreground="{StaticResource TextSecondaryColor}"/>
+
                             <TextBox Grid.Column="3"
-                                     LostFocus="TextBox_LostFocus" 
-                                     TextChanged="TextBox_TextChanged" 
-                                     Style="{StaticResource ModernTextBoxStyle}"
-                                     MinHeight="32"
-                                     VerticalContentAlignment="Center"
-                                     Padding="8,4"
-                                     Text="{Binding Port1}"/>
+                                Tag="required|Primary Server (port)"
+                                Margin="8,0,0,0"
+                                Width="80"
+                                MinHeight="32"
+                                HorizontalAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Padding="8,4"
+                                PreviewTextInput="TextBox_PreviewTextInput"
+                                Text="{Binding Port1}"
+                                Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
 
                         <!-- Secondary Server -->
                         <StackPanel Orientation="Horizontal" 
-                                    Grid.Row="1" 
-                                    Grid.Column="0" 
-                                    Margin="0,0,16,0" 
-                                    VerticalAlignment="Center"
-                                    MinWidth="140">
+                            Grid.Row="1" 
+                            Grid.Column="0" 
+                            Margin="0,0,16,0" 
+                            VerticalAlignment="Center"
+                            MinWidth="140">
                             <Label Content="Secondary Server:"/>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.Column="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <ComboBox x:Name="ComboBox2" 
-                                      Grid.Column="0"
-                                      MinHeight="32"
-                                      SelectedIndex="{Binding Protocol2, Mode=TwoWay}"
-                                      Style="{StaticResource WebComboBoxStyle}">
+                                Grid.Column="0"
+                                MinHeight="32"
+                                Width="100"
+                                HorizontalAlignment="Left"
+                                SelectedIndex="{Binding Protocol2, Mode=TwoWay}"
+                                Style="{StaticResource WebComboBoxStyle}">
                                 <ComboBoxItem>http://</ComboBoxItem>
                                 <ComboBoxItem>https://</ComboBoxItem>
                             </ComboBox>
+
                             <TextBox Grid.Column="1"
-                                     Style="{StaticResource ModernTextBoxStyle}"
-                                     MinHeight="32"
-                                     VerticalContentAlignment="Center"
-                                     Padding="8,4"
-                                     MinWidth="240"
-                                     HorizontalAlignment="Stretch"
-                                     Text="{Binding Domain2}"/>
-                            <TextBlock Grid.Column="2" Text=":" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       Foreground="{StaticResource TextSecondaryColor}"/>
+                                Margin="8,0,0,0"
+                                Width="160"
+                                MinHeight="32"
+                                HorizontalAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Padding="8,4"
+                                Text="{Binding Domain2}"
+                                Style="{StaticResource ModernTextBoxStyle}"/>
+
+                            <TextBlock Grid.Column="2" 
+                                Margin="8,0,0,0"
+                                Text=":" 
+                                VerticalAlignment="Center" 
+                                HorizontalAlignment="Left"
+                                Foreground="{StaticResource TextSecondaryColor}"/>
+
                             <TextBox Grid.Column="3"
-                                     Style="{StaticResource ModernTextBoxStyle}"
-                                     MinHeight="32"
-                                     VerticalContentAlignment="Center"
-                                     Padding="8,4"
-                                     Text="{Binding Port2}"/>
+                                Margin="8,0,0,0"
+                                Width="80"
+                                MinHeight="32"
+                                HorizontalAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Padding="8,4"
+                                Text="{Binding Port2}"
+                                Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
                     </Grid>
                 </StackPanel>

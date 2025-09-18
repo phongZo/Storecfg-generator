@@ -1,55 +1,95 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: StorecfgGenerator.RuleJson
-// Assembly: StorecfgGenerator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 0723BBEC-1C2F-455C-81B7-FC369DB2048E
-// Assembly location: C:\AgileMomentum\AgileMark\source\StoreCfgGenerator\StorecfgGenerator.exe
-
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace StorecfgGenerator
 {
-    public class RuleJson
+    public class RuleJson : INotifyPropertyChanged
     {
         private string _data;
-        private ObservableCollection<string> _items;
+        private readonly ObservableCollection<string> _items;
         private string _method;
+
+        public RuleJson()
+        {
+            _items = new ObservableCollection<string>
+            {
+                "PING", "HTTP", "HTTPS", "DNS", "PROCESS", "WAIT"
+            };
+            _method = "PING";
+
+            extras = new ExtrasJson
+            {
+                timeout = 0,
+                tries = 0,
+                interval = 0,
+                dns = null,
+                flowThrough = false
+            };
+        }
 
         public string data
         {
-            get => this._data;
+            get => _data;
             set
             {
-                this._data = value;
-                this.OnPropertyChanged(nameof(data));
+                if (_data == value) return;
+                _data = value;
+                OnPropertyChanged(nameof(data));
+                OnPropertyChanged(nameof(Domain));
+                OnPropertyChanged(nameof(Port));
             }
         }
 
         public ExtrasJson extras { get; set; }
 
         [JsonIgnore]
-        public ObservableCollection<string> Items => this._items;
+        public ObservableCollection<string> Items => _items;
 
         public string method
         {
-            get => this._method;
+            get => _method;
             set
             {
-                this._method = value;
-                this.OnPropertyChanged(nameof(method));
+                if (_method == value) return;
+                _method = value;
+                OnPropertyChanged(nameof(method));
+
+                // HTTP/HTTPS
+                if (IsHttpLike())
+                {
+                    var host = Domain;
+                    var port = Port;
+                    data = ComposeUrl(host, port);
+                }
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private bool IsHttpLike() => method == "HTTP" || method == "HTTPS";
+        private string Scheme() => method == "HTTPS" ? "https" : "http";
+
+        private string ComposeUrl(string host, string port)
         {
-            PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged((object)this, new PropertyChangedEventArgs(propertyName));
+            if (string.IsNullOrWhiteSpace(host)) return string.Empty;
+
+            if (string.IsNullOrWhiteSpace(port))
+                return $"{Scheme()}://{host}";
+            return $"{Scheme()}://{host}:{port}";
+        }
+
+        private static string StripScheme(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return string.Empty;
+            if (s.StartsWith("http://", true, CultureInfo.InvariantCulture))
+                return s.Substring("http://".Length);
+            if (s.StartsWith("https://", true, CultureInfo.InvariantCulture))
+                return s.Substring("https://".Length);
+            return s;
         }
 
         [JsonIgnore]
@@ -57,22 +97,26 @@ namespace StorecfgGenerator
         {
             get
             {
-                try
-                {
-                    if (this.method == "HTTP" || this.method == "HTTPS")
-                        return new Uri(this.data).Host;
-                }
-                catch (Exception)
-                {
-                }
-                return "";
+                if (!IsHttpLike()) return string.Empty;
+
+                var s = StripScheme(_data?.Trim());
+                if (string.IsNullOrEmpty(s)) return string.Empty;
+
+                var slash = s.IndexOf('/');
+                if (slash >= 0) s = s.Substring(0, slash);
+
+                var colon = s.LastIndexOf(':');
+                if (colon > 0) s = s.Substring(0, colon);
+
+                return s;
             }
             set
             {
-                string str = "http://";
-                if (this.method == "HTTPS")
-                    str = "https://";
-                this.data = str + value + ":" + this.Port;
+                if (!IsHttpLike()) return;
+
+                var host = (value ?? string.Empty).Trim();
+                var port = Port;
+                data = ComposeUrl(host, port);
             }
         }
 
@@ -81,36 +125,35 @@ namespace StorecfgGenerator
         {
             get
             {
-                try
+                if (!IsHttpLike()) return string.Empty;
+
+                var s = StripScheme(_data?.Trim());
+                if (string.IsNullOrEmpty(s)) return string.Empty;
+
+                var slash = s.IndexOf('/');
+                if (slash >= 0) s = s.Substring(0, slash);
+
+                var colon = s.LastIndexOf(':');
+                if (colon > 0 && colon < s.Length - 1)
                 {
-                    if (this.method == "HTTP" || this.method == "HTTPS")
-                        return new Uri(this.data).Port.ToString();
+                    var maybePort = s.Substring(colon + 1).Trim();
+                    if (int.TryParse(maybePort, out _)) return maybePort;
                 }
-                catch (Exception ex)
-                {
-                }
-                return "";
+                return string.Empty;
             }
             set
             {
-                string str = "http://";
-                if (this.method == "HTTPS")
-                    str = "https://";
-                this.data = str + this.Domain + ":" + value;
-            }
-        }
+                if (!IsHttpLike()) return;
 
-        public RuleJson()
-        {
-            ObservableCollection<string> observableCollection = new ObservableCollection<string>();
-            observableCollection.Add("PING");
-            observableCollection.Add("HTTP");
-            observableCollection.Add("HTTPS");
-            observableCollection.Add("DNS");
-            observableCollection.Add("PROCESS");
-            observableCollection.Add("WAIT");
-            this._items = observableCollection;
-            this._method = "PING";
+                var newPort = (value ?? string.Empty).Trim();
+                if (newPort.Length > 0 && !int.TryParse(newPort, out _))
+                {
+                    return;
+                }
+
+                var host = Domain;
+                data = ComposeUrl(host, newPort);
+            }
         }
     }
 }

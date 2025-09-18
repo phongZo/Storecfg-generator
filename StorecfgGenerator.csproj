@@ -99,6 +99,7 @@
     <Compile Include="Code\Converter\Conditions\ConditionProcessInputVisibility.cs" />
     <Compile Include="Code\Converter\Conditions\ConditionWaitToVisibility.cs" />
     <Compile Include="Code\Converter\Conditions\ConditionNonProcessInputVisibility.cs" />
+    <Compile Include="Code\Converter\Conditions\IntOrNullConverter.cs" />
     <Compile Include="Code\Converter\Conditions\StringIsNotEmptyConverter.cs" />
     <Compile Include="Code\Converter\VisibleForDevMode.cs" />
     <Compile Include="Code\Encryptor.cs" />
@@ -123,8 +124,6 @@
     <Compile Include="Code\TimeFormatConverter.cs" />
     <Compile Include="Code\StringToTagsConverter.cs" />
     <Compile Include="Code\InverseBooleanConverter.cs" />
-
-
     <Compile Include="Views\Condition\Conditions.xaml.cs">
       <DependentUpon>Conditions.xaml</DependentUpon>
     </Compile>
@@ -158,7 +157,6 @@
     <Compile Include="Views\ProfileTab.xaml.cs">
       <DependentUpon>ProfileTab.xaml</DependentUpon>
     </Compile>
-
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -21,10 +21,10 @@
             <local:ConditionProcessInputVisibility x:Key="ConditionProcessInputVisibility"/>
             <local:ConditionNonProcessInputVisibility x:Key="ConditionNonProcessInputVisibility"/>
             <local:StringToTagsConverter x:Key="StringToTagsConverter"/>
+            <local:IntOrNullConverter x:Key="IntOrNullConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <StackPanel Width="Auto" Margin="0 10 0 0">
-        <!-- Removed redundant header; parent provides section title -->
         <Button Click="Add_Condition_Top_Btn_Click"
                 Style="{StaticResource MinimalButtonStyle}"
                 Margin="0,8,0,0"
@@ -41,117 +41,209 @@
                     <Border Style="{StaticResource CardStyle}" Padding="12" Margin="0,10,0,0">
                         <DockPanel>
                             <Grid Width="40" MinHeight="32" Margin="0,11,8,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                                <Image Cursor="Hand" Source="/Icon/ban-solid.png" Height="14" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                <Image Cursor="Hand" Source="/Icon/ban-solid.png" Height="14"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" 
                                        MouseLeftButtonDown="RemoveCondition_Click" Tag="{Binding}"/>
                             </Grid>
-                        <ItemsControl ItemsSource="{Binding rules}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="5,0,0,0" HorizontalAlignment="Center" Width="140" VerticalAlignment="Center">
-                                        <TextBlock Text="Flow through"
-                                                   FontSize="12"
-                                                   TextAlignment="Center"
-                                                   HorizontalAlignment="Center"
-                                                   Foreground="{StaticResource TextSecondaryColor}"/>
-                                        <CheckBox Margin="0,6,0,0"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Padding="0"
-                                                  IsChecked="{Binding extras.flowThrough}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left">
-                            <TextBlock Text="Name" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
-                            <TextBox Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0" MinHeight="32" MinWidth="140" VerticalContentAlignment="Center"
-                                     Text="{Binding name}"/>
-                        </StackPanel>
-                        <DockPanel>
                             <ItemsControl ItemsSource="{Binding rules}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left">
-                                            <TextBlock Text="Method" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
-                                            <ComboBox x:Name="SelectedMethod" Style="{StaticResource WebComboBoxStyle}" Margin="0,6,0,0"
-                                                      MinHeight="32" MinWidth="120"
-                                                      ItemsSource="{Binding Items}" SelectedItem="{Binding method}"/>
+                                        <StackPanel Margin="5,0,0,0" HorizontalAlignment="Center" Width="140" VerticalAlignment="Center">
+                                            <TextBlock Text="Flow through"
+                                                       FontSize="12"
+                                                       TextAlignment="Center"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="{StaticResource TextSecondaryColor}"/>
+                                            <CheckBox Margin="0,6,0,0"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Padding="0"
+                                                      IsChecked="{Binding extras.flowThrough}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left"
-                        Visibility="{Binding ElementName=SelectedMethod, Path=SelectedItem, Converter={StaticResource ConditionWaitToVisibility}}">
-                                <TextBlock Text="Marker" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
-                                <ComboBox Style="{StaticResource WebComboBoxStyle}" Margin="0,6,0,0" MinHeight="32" MinWidth="180"
-                        ItemsSource="{Binding DataContext.MarkerListName, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                        SelectedItem="{Binding marker}"/>
+                            <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left">
+                                <TextBlock Text="Name" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
+                                <TextBox Tag="required|Condition Name"
+                                         Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0"
+                                         MinHeight="32" MinWidth="140" VerticalContentAlignment="Center"
+                                         Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
-                        </DockPanel>
-                        <ItemsControl ItemsSource="{Binding rules}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel>
-                                        <StackPanel x:Name="DomainOrProcessPanel" Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left"
-                              Visibility="{Binding method, Converter={StaticResource ConditionWaitToVisibility}}">
-                                            <TextBlock FontSize="12" Foreground="{StaticResource TextSecondaryColor}"
-                                                       Text="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}"/>
-                                            <Grid x:Name="DomainWithPortPanel"
-                                                  Visibility="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="200"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="80"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Border Grid.Column="0" Margin="0,6,8,0" Background="{StaticResource SurfaceColor}"
-                                                        BorderBrush="{StaticResource BorderColor}" BorderThickness="1"
-                                                        CornerRadius="4" Padding="8,4" VerticalAlignment="Center">
-                                                    <TextBlock x:Name="ConditionProtocol" Text="{Binding method, Converter={StaticResource MethodToProtocolConverter}}"
-                                                               Foreground="{StaticResource TextSecondaryColor}"/>
-                                                </Border>
-                                                <TextBox Grid.Column="1" Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,8,0"
-                                                         MinHeight="32" VerticalContentAlignment="Center" Text="{Binding Domain}"/>
-                                                <TextBlock Grid.Column="2" Text=":" Margin="0,6,8,0" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryColor}"/>
-                                                <TextBox Grid.Column="3" Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0"
-                                                         MinHeight="32" VerticalContentAlignment="Center" Text="{Binding Port}"/>
-                                            </Grid>
-                                            <DockPanel>
-                                                <viewsControls:TagInputControl Margin="0,6,0,0"
-                                                                               Width="400"
-                                                                               MinHeight="32"
-                                                                               VerticalAlignment="Center"
-                                                                               Visibility="{Binding method, Converter={StaticResource ConditionProcessInputVisibility}}"
-                                                                               Tags="{Binding data, Converter={StaticResource StringToTagsConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBox Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0" MinHeight="32" MinWidth="240"
-                                                         VerticalContentAlignment="Center" Text="{Binding data}"
-                                                         Visibility="{Binding method, Converter={StaticResource ConditionNonProcessInputVisibility}}"/>
-                                            </DockPanel>
-                                        </StackPanel>
-                                        <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left"
-                              Visibility="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}">
-                                            <TextBlock FontSize="12" Foreground="{StaticResource TextSecondaryColor}"
-                                                       Text="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}"/>
-                                            <TextBox Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0" HorizontalAlignment="Left"
-                                                     MinHeight="32" Width="80" VerticalContentAlignment="Center"
-                                                     Text="{Binding extras.ConditionTimeout}"/>
-                                        </StackPanel>
-                                        <StackPanel Margin="5,0,0,0" HorizontalAlignment="Stretch" MinWidth="240"
-                              Visibility="{Binding method, Converter={StaticResource ConditionMethodToDnsAddressVisibility}}">
-                                            <TextBlock Text="DNS server address (optional)" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
-                                            <TextBox x:Name="DnsInput" Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0" HorizontalAlignment="Stretch"
-                                                     MinHeight="32" MinWidth="240" VerticalContentAlignment="Center"
-                                                     Text="{Binding extras.dnsString}"/>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                            <DockPanel>
+                                <ItemsControl ItemsSource="{Binding rules}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left">
+                                                <TextBlock Text="Method" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
+                                                <ComboBox x:Name="SelectedMethod"
+                                                          Style="{StaticResource WebComboBoxStyle}" Margin="0,6,0,0"
+                                                          MinHeight="32" MinWidth="120"
+                                                          ItemsSource="{Binding Items}"
+                                                          SelectedItem="{Binding method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left"
+                                            Visibility="{Binding ElementName=SelectedMethod, Path=SelectedItem, Converter={StaticResource ConditionWaitToVisibility}}">
+                                    <TextBlock Text="Marker" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
+                                    <ComboBox Style="{StaticResource WebComboBoxStyle}" Margin="0,6,0,0"
+                                              MinHeight="32" MinWidth="180"
+                                              ItemsSource="{Binding DataContext.MarkerListName, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                              SelectedItem="{Binding marker, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </DockPanel>
+
+                            <!-- Domain/Port + data + timeout + dns -->
+                            <ItemsControl ItemsSource="{Binding rules}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <StackPanel x:Name="DomainOrProcessPanel" Margin="5 0 0 0" Width="Auto" HorizontalAlignment="Left"
+                                                        Visibility="{Binding method, Converter={StaticResource ConditionWaitToVisibility}}">
+                                                <TextBlock FontSize="12" Foreground="{StaticResource TextSecondaryColor}"
+                                                           Text="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}"/>
+
+                                                <!-- HTTP/HTTPS domain:port -->
+                                                <Grid x:Name="DomainWithPortPanel">
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" 
+                                                                    Value="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding method}" Value="HTTP">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding method}" Value="HTTPS">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="200"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBox Grid.Column="0"
+                                                             Style="{StaticResource ModernTextBoxStyle}"
+                                                             Margin="0,6,4,0"
+                                                             MinHeight="32"
+                                                             MinWidth="72"
+                                                             VerticalContentAlignment="Stretch"
+                                                             IsReadOnly="True"
+                                                             Focusable="False"
+                                                             IsTabStop="False"
+                                                             Cursor="Arrow"
+                                                             Text="{Binding method, Converter={StaticResource MethodToProtocolConverter}}"/>
+
+                                                    <TextBox Grid.Column="1"
+                                                             Margin="0,6,2,0"
+                                                             MinHeight="32"
+                                                             VerticalContentAlignment="Stretch"
+                                                             Text="{Binding Domain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                                                <Setter Property="Tag" Value="{x:Null}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTP">
+                                                                        <Setter Property="Tag" Value="required|Domain"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTPS">
+                                                                        <Setter Property="Tag" Value="required|Domain"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
+
+                                                    <TextBlock Grid.Column="2" Text=":" Margin="0,6,2,0"
+                                                               VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryColor}"/>
+                                                    <TextBox Grid.Column="3"
+                                                             Margin="0,6,0,0"
+                                                             MinHeight="32"
+                                                             VerticalContentAlignment="Stretch"
+                                                             Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PreviewTextInput="TextBox_PreviewTextInput">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                                                <Setter Property="Tag" Value="{x:Null}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTP">
+                                                                        <Setter Property="Tag" Value="required:int>0|Port"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTPS">
+                                                                        <Setter Property="Tag" Value="required:int>0|Port"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
+                                                </Grid>
+                                                <DockPanel>
+                                                    <viewsControls:TagInputControl Margin="0,6,0,0"
+                                                                                   Width="400"
+                                                                                   MinHeight="32"
+                                                                                   VerticalContentAlignment="Stretch"
+                                                                                   Visibility="{Binding method, Converter={StaticResource ConditionProcessInputVisibility}}"
+                                                                                   Tags="{Binding data, Converter={StaticResource StringToTagsConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    <TextBox Margin="0,6,0,0" MinHeight="32" MinWidth="240"
+                                                             VerticalContentAlignment="Center"
+                                                             Text="{Binding data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                                                <Setter Property="Visibility"
+                                                                        Value="{Binding method, Converter={StaticResource ConditionNonProcessInputVisibility}}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTP">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTPS">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
+                                                </DockPanel>
+                                            </StackPanel>
+                                            <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left"
+                                                        Visibility="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}">
+                                                <TextBlock FontSize="12" Foreground="{StaticResource TextSecondaryColor}"
+                                                           Text="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}"/>
+                                                <TextBox Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0" HorizontalAlignment="Left"
+                                                         MinHeight="32" Width="80" VerticalContentAlignment="Center"
+                                                         PreviewTextInput="TextBox_PreviewTextInput"
+                                                         Text="{Binding extras.timeout,
+                                                                        Mode=TwoWay,
+                                                                        UpdateSourceTrigger=PropertyChanged,
+                                                                        Converter={StaticResource IntOrNullConverter},
+                                                                        ValidatesOnExceptions=True,
+                                                                        ValidatesOnDataErrors=True,
+                                                                        TargetNullValue=''}"/>
+                                            </StackPanel>
+                                            <StackPanel Margin="5,0,0,0" HorizontalAlignment="Stretch" MinWidth="240"
+                                                        Visibility="{Binding method, Converter={StaticResource ConditionMethodToDnsAddressVisibility}}">
+                                                <TextBlock Text="DNS server address (optional)" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
+                                                <TextBox x:Name="DnsInput" Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0"
+                                                         HorizontalAlignment="Stretch"
+                                                         MinHeight="32" MinWidth="240" VerticalContentAlignment="Center"
+                                                         Text="{Binding extras.dnsString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </DockPanel>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
         <Button Click="Add_Condition_Bottom_Btn_Click"
                 Style="{StaticResource MinimalButtonStyle}"
                 Margin="0,10,0,0"
