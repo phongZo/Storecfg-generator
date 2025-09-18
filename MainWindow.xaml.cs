@@ -67,6 +67,16 @@ namespace StorecfgGenerator
                 bindingExpression?.UpdateSource();
             }
 
+            if (GeneralTab.Instance != null)
+            {
+                string msg;
+                if (!GeneralTab.Instance.ValidateAllRequired(out msg))
+                {
+                    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Hand);
+                    return;
+                }
+            }
+
             if (string.IsNullOrEmpty(currentFilePath))
             {
                 generalTab.Generate_Storecfg();
@@ -81,6 +91,16 @@ namespace StorecfgGenerator
 
         private void SaveAsFile_Click(object sender, RoutedEventArgs e)
         {
+            if (GeneralTab.Instance != null)
+            {
+                string msg;
+                if (!GeneralTab.Instance.ValidateAllRequired(out msg))
+                {
+                    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Hand);
+                    return;
+                }
+            }
+
             if (Keyboard.FocusedElement is TextBox focusedElement)
             {
                 var bindingExpression = focusedElement.GetBindingExpression(TextBox.TextProperty);

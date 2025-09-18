@@ -87,13 +87,12 @@
                             <Label Content="Customer ID:"/>
                         </StackPanel>
                         <TextBox Grid.Row="0" 
-                                 Grid.Column="1" 
+                                 Grid.Column="1"
+                                 Tag="required|Customer ID"
                                  Style="{StaticResource ModernTextBoxStyle}"
                                  MinHeight="32"
                                  VerticalContentAlignment="Center"
                                  Padding="8,4"
-                                 LostFocus="TextBox_LostFocus" 
-                                 TextChanged="TextBox_TextChanged"
                                  Text="{Binding CustomerID}"/>
 
                         <!-- Client ID -->
@@ -107,14 +106,13 @@
                             <Label Content="Client ID:"/>
                         </StackPanel>
                         <TextBox Grid.Row="1" 
-                                 Grid.Column="1" 
+                                 Grid.Column="1"
+                                 Tag="required|Client ID"
                                  Style="{StaticResource ModernTextBoxStyle}"
                                  MinHeight="32"
                                  VerticalContentAlignment="Center"
                                  Padding="8,4"
-                                 PreviewTextInput="TextBox_PreviewTextInput" 
-                                 LostFocus="TextBox_LostFocus"
-                                 TextChanged="TextBox_TextChanged" 
+                                 PreviewTextInput="TextBox_PreviewTextInput"
                                  Text="{Binding ClientID}"/>
 
                         <!-- License -->
@@ -128,13 +126,12 @@
                             <Label Content="License:"/>
                         </StackPanel>
                         <TextBox Grid.Row="2" 
-                                 Grid.Column="1" 
+                                 Grid.Column="1"
+                                 Tag="required|License"
                                  Style="{StaticResource ModernTextBoxStyle}"
                                  MinHeight="32"
                                  VerticalContentAlignment="Center"
                                  Padding="8,4"
-                                 LostFocus="TextBox_LostFocus" 
-                                 TextChanged="TextBox_TextChanged"
                                  Text="{Binding License}"/>
                     </Grid>
                 </StackPanel>
@@ -230,7 +227,8 @@
                                 <ComboBoxItem>https://</ComboBoxItem>
                             </ComboBox>
 
-                                <TextBox Grid.Column="1"
+                            <TextBox Grid.Column="1"
+                                Tag="required|Primary Server (domain)"
                                 Margin="8,0,0,0"
                                 Width="160"
                                 MinHeight="32"
@@ -238,11 +236,9 @@
                                 VerticalContentAlignment="Center"
                                 Padding="8,4"
                                 Text="{Binding Domain1}"
-                                LostFocus="TextBox_LostFocus" 
-                                TextChanged="TextBox_TextChanged"
                                 Style="{StaticResource ModernTextBoxStyle}"/>
 
-                                            <TextBlock Grid.Column="2" 
+                            <TextBlock Grid.Column="2" 
                                 Margin="8,0,0,0"
                                 Text=":" 
                                 VerticalAlignment="Center" 
@@ -250,15 +246,15 @@
                                 Foreground="{StaticResource TextSecondaryColor}"/>
 
                             <TextBox Grid.Column="3"
+                                Tag="required|Primary Server (port)"
                                 Margin="8,0,0,0"
                                 Width="80"
                                 MinHeight="32"
                                 HorizontalAlignment="Left"
                                 VerticalContentAlignment="Center"
                                 Padding="8,4"
+                                PreviewTextInput="TextBox_PreviewTextInput"
                                 Text="{Binding Port1}"
-                                LostFocus="TextBox_LostFocus" 
-                                TextChanged="TextBox_TextChanged"
                                 Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
 

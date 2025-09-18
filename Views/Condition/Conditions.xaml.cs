@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace StorecfgGenerator
 {
@@ -22,9 +21,7 @@ namespace StorecfgGenerator
         {
             StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions.Insert(0, new ConditionJson()
             {
-                rules = {
-          new RuleJson()
-        }
+                rules = { new RuleJson() }
             });
         }
 
@@ -32,9 +29,7 @@ namespace StorecfgGenerator
         {
             StoreCfg.Instance.CurrentStoreCfg.Profile.Conditions.Add(new ConditionJson()
             {
-                rules = {
-          new RuleJson()
-        }
+                rules = { new RuleJson() }
             });
         }
 
@@ -79,40 +74,6 @@ namespace StorecfgGenerator
             }
             textBox.SelectionStart = textBox.Text.Length;
             textBox.SelectionLength = 0;
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!(sender is TextBox textBox))
-                return;
-            ValidateTextBox(textBox);
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is TextBox textBox))
-                return;
-            ValidateTextBox(textBox);
-        }
-
-        private void ValidateTextBox(TextBox textBox)
-        {
-            if (textBox.Text.Trim().Equals(""))
-                textBox.Dispatcher.Invoke(() =>
-                {
-                    textBox.BorderBrush = Brushes.Red;
-                    textBox.BorderThickness = new Thickness(1.0);
-                    textBox.InvalidateVisual();
-                    GeneralTab.Instance.IsAllFieldsFilled = false;
-                });
-            else
-                textBox.Dispatcher.Invoke(() =>
-                {
-                    textBox.BorderBrush = (Brush)new BrushConverter().ConvertFrom((object)"#d9d9d9");
-                    textBox.BorderThickness = new Thickness(1.0);
-                    textBox.InvalidateVisual();
-                    GeneralTab.Instance.IsAllFieldsFilled = false;
-                });
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

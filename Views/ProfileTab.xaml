@@ -118,23 +118,26 @@
                                 <TextBlock Style="{StaticResource RequiredFieldStyle}"/>
                                 <TextBlock Text="Wait Time (s):" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                             </StackPanel>
-                            <TextBox Grid.Row="2" Grid.Column="1" PreviewTextInput="TextBox_PreviewTextInput" LostFocus="TextBox_LostFocus" TextChanged="TextBox_TextChanged" Style="{StaticResource ModernTextBoxStyle}" Width="80" MinHeight="32" VerticalContentAlignment="Center" Padding="8,4" HorizontalAlignment="Left" Margin="0,12,0,0" Text="{Binding Profile.WaitTime}"/>
+                            <TextBox x:Name="WaitTimeTextBox"
+                                     Grid.Row="2" Grid.Column="1"
+                                     Tag="required|Wait Time (s)"
+                                     PreviewTextInput="TextBox_PreviewTextInput"
+                                     Style="{StaticResource ModernTextBoxStyle}" 
+                                     Width="80" MinHeight="32" VerticalContentAlignment="Center" Padding="8,4" 
+                                     HorizontalAlignment="Left" Margin="0,12,0,0"
+                                     Text="{Binding Profile.WaitTime}"/>
 
                             <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,12,12,0">
                                 <TextBlock Style="{StaticResource RequiredFieldStyle}"/>
                                 <TextBlock Text="Refresh Interval (s):" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                             </StackPanel>
-                            <TextBox Grid.Row="3" Grid.Column="1" 
-                                     PreviewTextInput="TextBox_PreviewTextInput" 
-                                     LostFocus="TextBox_LostFocus" 
-                                     TextChanged="TextBox_TextChanged" 
+                            <TextBox x:Name="RefreshIntervalTextBox"
+                                     Grid.Row="3" Grid.Column="1"
+                                     Tag="required|Refresh Interval (s)"
+                                     PreviewTextInput="TextBox_PreviewTextInput"
                                      Style="{StaticResource ModernTextBoxStyle}" 
-                                     Width="80" 
-                                     MinHeight="32" 
-                                     VerticalContentAlignment="Center" 
-                                     Padding="8,4" 
-                                     HorizontalAlignment="Left" 
-                                     Margin="0,12,0,0" 
+                                     Width="80" MinHeight="32" VerticalContentAlignment="Center" Padding="8,4" 
+                                     HorizontalAlignment="Left" Margin="0,12,0,0"
                                      Text="{Binding Profile.SlowRefreshInterval, Converter={StaticResource MillisecondsToSecondsConverter}, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,12,12,0">
@@ -142,15 +145,11 @@
                                 <TextBlock Text="Maximum Log Size:" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                             </StackPanel>
                             <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,12,0,0">
-                                <TextBox 
-                                         PreviewTextInput="TextBox_PreviewTextInput" 
-                                         LostFocus="TextBox_LostFocus" 
-                                         TextChanged="TextBox_TextChanged" 
+                                <TextBox x:Name="MaxLogSizeTextBox"
+                                         Tag="required|Maximum Log Size (MB)"
+                                         PreviewTextInput="TextBox_PreviewTextInput"
                                          Style="{StaticResource ModernTextBoxStyle}" 
-                                         Width="80" 
-                                         MinHeight="32" 
-                                         VerticalContentAlignment="Center" 
-                                         Padding="8,4" 
+                                         Width="80" MinHeight="32" VerticalContentAlignment="Center" Padding="8,4"
                                          Text="{Binding Profile.LogRotation.size}"/>
                                 <TextBlock Text="(MB)" VerticalAlignment="Center" Margin="8,0,0,0" Foreground="Black"/>
                             </StackPanel>
@@ -177,16 +176,16 @@
 
                     <Border Height="1" Background="{StaticResource BorderColor}" Margin="0,8,0,0"/>
 
-                    <!-- Advanced Condition Check Setting Field -->
                     <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
                         <TextBlock Text="Advanced Condition Check setting:" 
                                    VerticalAlignment="Center"
                                    TextWrapping="Wrap"
                                    Margin="0,0,8,0"/>
 
-                        <ToggleButton Style="{StaticResource ModernToggleButtonStyle}" 
-                                     IsChecked="{Binding Profile.AdvancedConditionCheck}"
-                                     VerticalAlignment="Center"/>
+                        <ToggleButton x:Name="AdvancedConditionToggle"
+                                      Style="{StaticResource ModernToggleButtonStyle}" 
+                                      IsChecked="{Binding Profile.AdvancedConditionCheck}"
+                                      VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <StackPanel x:Name="AdvancedConditionPanel" 
@@ -199,14 +198,21 @@
                                        VerticalAlignment="Center"
                                        TextWrapping="Wrap"
                                        Margin="0,0,8,0"/>
-
-                            <TextBox Style="{StaticResource ModernTextBoxStyle}" 
-                                     Width="80" 
-                                     MinHeight="32" 
-                                     VerticalContentAlignment="Center" 
-                                     Padding="8,4" 
-                                     Text="{Binding Profile.NumberOfRechecks}"
-                                     PreviewTextInput="TextBox_PreviewTextInput"/>
+                            <TextBox x:Name="NumberOfRechecksTextBox"
+                                     Width="80" MinHeight="32" VerticalContentAlignment="Center" Padding="8,4" 
+                                     PreviewTextInput="TextBox_PreviewTextInput"
+                                     Text="{Binding Profile.NumberOfRechecks}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                        <Setter Property="Tag" Value="{x:Null}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Profile.AdvancedConditionCheck}" Value="True">
+                                                <Setter Property="Tag" Value="required|Number of Rechecks"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
                         </StackPanel>
 
                         <!-- Recheck Interval -->
@@ -215,14 +221,21 @@
                                        VerticalAlignment="Center"
                                        TextWrapping="Wrap"
                                        Margin="0,0,8,0"/>
-
-                            <TextBox Style="{StaticResource ModernTextBoxStyle}" 
-                                     Width="80" 
-                                     MinHeight="32" 
-                                     VerticalContentAlignment="Center" 
-                                     Padding="8,4" 
-                                     Text="{Binding Profile.RecheckInterval}"
-                                     PreviewTextInput="TextBox_PreviewTextInput"/>
+                            <TextBox x:Name="RecheckIntervalTextBox"
+                                     Width="80" MinHeight="32" VerticalContentAlignment="Center" Padding="8,4" 
+                                     PreviewTextInput="TextBox_PreviewTextInput"
+                                     Text="{Binding Profile.RecheckInterval}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                        <Setter Property="Tag" Value="{x:Null}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Profile.AdvancedConditionCheck}" Value="True">
+                                                <Setter Property="Tag" Value="required|Recheck Condition Interval"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

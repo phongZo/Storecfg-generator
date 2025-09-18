@@ -65,7 +65,8 @@
                             </ItemsControl>
                             <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left">
                                 <TextBlock Text="Name" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
-                                <TextBox Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0"
+                                <TextBox Tag="required|Condition Name"
+                                         Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0"
                                          MinHeight="32" MinWidth="140" VerticalContentAlignment="Center"
                                          Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
@@ -75,7 +76,8 @@
                                         <DataTemplate>
                                             <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left">
                                                 <TextBlock Text="Method" FontSize="12" Foreground="{StaticResource TextSecondaryColor}"/>
-                                                <ComboBox x:Name="SelectedMethod" Style="{StaticResource WebComboBoxStyle}" Margin="0,6,0,0"
+                                                <ComboBox x:Name="SelectedMethod"
+                                                          Style="{StaticResource WebComboBoxStyle}" Margin="0,6,0,0"
                                                           MinHeight="32" MinWidth="120"
                                                           ItemsSource="{Binding Items}"
                                                           SelectedItem="{Binding method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -92,6 +94,8 @@
                                               SelectedItem="{Binding marker, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </DockPanel>
+
+                            <!-- Domain/Port + data + timeout + dns -->
                             <ItemsControl ItemsSource="{Binding rules}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -101,6 +105,7 @@
                                                 <TextBlock FontSize="12" Foreground="{StaticResource TextSecondaryColor}"
                                                            Text="{Binding method, Converter={StaticResource ConditionMethodToLabelAndVisible}}"/>
 
+                                                <!-- HTTP/HTTPS domain:port -->
                                                 <Grid x:Name="DomainWithPortPanel">
                                                     <Grid.Style>
                                                         <Style TargetType="Grid">
@@ -136,26 +141,53 @@
                                                              Text="{Binding method, Converter={StaticResource MethodToProtocolConverter}}"/>
 
                                                     <TextBox Grid.Column="1"
-                                                             Style="{StaticResource ModernTextBoxStyle}"
                                                              Margin="0,6,2,0"
                                                              MinHeight="32"
                                                              VerticalContentAlignment="Stretch"
-                                                             Text="{Binding Domain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                             Text="{Binding Domain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                                                <Setter Property="Tag" Value="{x:Null}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTP">
+                                                                        <Setter Property="Tag" Value="required|Domain"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTPS">
+                                                                        <Setter Property="Tag" Value="required|Domain"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
 
                                                     <TextBlock Grid.Column="2" Text=":" Margin="0,6,2,0"
                                                                VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryColor}"/>
                                                     <TextBox Grid.Column="3"
-                                                             Style="{StaticResource ModernTextBoxStyle}"
                                                              Margin="0,6,0,0"
                                                              MinHeight="32"
                                                              VerticalContentAlignment="Stretch"
-                                                             Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                             Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PreviewTextInput="TextBox_PreviewTextInput">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+                                                                <Setter Property="Tag" Value="{x:Null}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTP">
+                                                                        <Setter Property="Tag" Value="required:int>0|Port"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding method}" Value="HTTPS">
+                                                                        <Setter Property="Tag" Value="required:int>0|Port"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
                                                 </Grid>
                                                 <DockPanel>
                                                     <viewsControls:TagInputControl Margin="0,6,0,0"
                                                                                    Width="400"
                                                                                    MinHeight="32"
-                                                             VerticalContentAlignment="Stretch"
+                                                                                   VerticalContentAlignment="Stretch"
                                                                                    Visibility="{Binding method, Converter={StaticResource ConditionProcessInputVisibility}}"
                                                                                    Tags="{Binding data, Converter={StaticResource StringToTagsConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
@@ -185,6 +217,7 @@
                                                            Text="{Binding method, Converter={StaticResource ConditionMethodToShowTimeoutVisibility}}"/>
                                                 <TextBox Style="{StaticResource ModernTextBoxStyle}" Margin="0,6,0,0" HorizontalAlignment="Left"
                                                          MinHeight="32" Width="80" VerticalContentAlignment="Center"
+                                                         PreviewTextInput="TextBox_PreviewTextInput"
                                                          Text="{Binding extras.timeout,
                                                                         Mode=TwoWay,
                                                                         UpdateSourceTrigger=PropertyChanged,
